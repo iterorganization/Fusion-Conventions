@@ -81,6 +81,18 @@ TODO
 
 ## Labels and Alternative Coordinates
 
-TODO
+### Labels
 
+Character strings can be used to provide a name or label for each element of an
+axis. This is particularly useful for discrete axes. For instance, if a data
+variable contains time series of current through a number of poloidal field
+coils, it may be convenient to provide the names of the coils as labels.
 
+### Alternative Coordinates
+
+In some situations a dimension may have alternative sets of coordinates values.
+Since there can only be one coordinate variable for the dimension (the variable
+with the same name as the dimension), any alternative sets of values have to be
+stored in auxiliary coordinate variables. For such alternative coordinate
+variables, there are no mandatory attributes, but they may have any of the
+attributes allowed for coordinate variables.

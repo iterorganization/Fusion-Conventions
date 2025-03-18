@@ -4,7 +4,7 @@
 
 This document describes the Fusion Conventions for storing nuclear fusion data
 (modeling and/or experimental) as labeled N-dimensional arrays. The conventions
-define metadata that provide a definitive description of waht the data in each
+define metadata that provide a definitive description of what the data in each
 variable represents, and of the spatial and temporal properties of the data.
 This enables users of data from different sources to decide which quantities are
 comparable, and facilitates building applications with powerful extraction,

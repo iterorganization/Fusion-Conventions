@@ -29,7 +29,22 @@ TODO
 
 ### Data Types
 
-TODO
+Data variables must be one of the following data types:
+
+- `string` for text (non-numeric) data
+- `byte` (`int8`), `short` (`int16`), `int` (`int32`), `int64`, and their
+  `unsigned` counterparts, for integer numeric data
+- `float` (`float32`) and `double` (`float64`) for non-integer numeric data
+- `complex64` and `complex128` for complex valued data
+
+**Notes:**
+
+1. NetCDF and HDF5 do not natively support complex data types (unlike Zarr).
+   When using netCDF files we recommend the [`nc-complex`
+   library](https://nc-complex.readthedocs.io/en/latest/) which is integrated with
+   the `netCDF4` python bindings.
+2. The `char` datatype may be used for metadata-only variables, but shouldn't be
+   used to store text. Use the variable length `string` data type instead.
 
 ### Naming Conventions
 

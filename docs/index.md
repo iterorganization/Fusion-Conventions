@@ -33,7 +33,21 @@ TODO
 
 ### Naming Conventions
 
-TODO
+It is recommended that variable, dimension, attribute and group names begin with
+a letter and be composed of letters, digits, and underscores. By the word
+_letters_ we mean the standard ASCII letters uppercase `A` to `Z` and lowercase
+`a` to `z`. By the word digits we mean the standard ASCII digits `0` to `9`, and
+similarly underscores means the standard ASCII underscore `_`.
+
+Case is significant in names, but it is recommended that names should not be
+distinguished purely by case. If case is disregarded, no two names should
+be the same. It is also recommended that names should be obviously meaningful,
+if possible, as this renders the file more effectively self-describing.
+
+This convention does not standardize any variable or dimension names. Attribute
+names and their contents, where standardized, are given in English in this
+document and should appear in English in conforming datasets for the sake of
+portability.
 
 ### Dimensions
 

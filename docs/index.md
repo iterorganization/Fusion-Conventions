@@ -57,7 +57,23 @@ TODO
 
 ### Units
 
-TODO
+The `units` attribute is required for all variables that represent dimensional
+quantities. The `units` attribute is permitted (with a value of `1`) but not
+required for dimensionless quantities.
+
+If a variable has the `standard_name` attribute, the value of `units` _must_
+match the units defined by the [standard name](#standard-name). If a variable
+does not have a standard name, it must be a string that can be recognized by the
+[UDUNITS](https://www.unidata.ucar.edu/software/udunits/) package. It is highly
+recommended that the `units` follow the same convention as the IMAS Standard
+Names, that is:
+
+- Units are expressed as [Coherent SI
+  Units](https://en.wikipedia.org/wiki/International_System_of_Units#Coherent_and_non-coherent_SI_units),
+  the atomic mass unit (`u`), elementary charge unit (`e`), electronvolt
+  (`eV`) or combinations thereof.
+- Derived units are separated by `.` and use `^` for exponents other than 1. For
+  example `m.s^-1` (not `m/s`), `ohm.m`, `m^-3`, `m^2.sr`.
 
 ### Standard Name
 

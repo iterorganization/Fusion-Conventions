@@ -16,7 +16,7 @@ The _geometry_container_ MUST have at least the following two attributes
 The string-value of the attribute `node_coordinates` contains the names of the
 variables in the data structure that hold the actual geometric data, all
 separated by a single space. Each of
-these variables must hold an attribute `standard_name`, indicating which
+these variables MUST hold an attribute `standard_name`, indicating which
 cylindrical coordinate this variable represents. The value of this attribute
 MUST differ for each of these variables.
 
@@ -356,14 +356,14 @@ Note: if the first point coincides with the last point then the resulting geomet
 
 **Use case:**
 
-
+This geometry type is used to describe an axisymmetric volumes. Since each cross-section in the r,z-plane is the same for this geometry, it is sufficient to describe it by a polygon in the r,z-plane.
 
 **Extra requirements:**
 
-
-
-**Example**
-
+The required attributes of this type are exactly the same as with the geometric
+type 'polygon'. The only difference is that the attribute `node_coordinates`
+SHOULD not contain a variable whose attribute `standard_name` has value
+'_azimuth'.
 
 ## Geometries containing Multiple parts
 

@@ -131,7 +131,7 @@ be a dimension of _data_variable_.
 
 **Use case:**
 
-This geometric type describes connected line segments in 3D space.
+This geometric type describes connected line segments in 3D cartesian space. Each line segment is described by two points, the start and end point.
 
 **Extra requirements:**
 

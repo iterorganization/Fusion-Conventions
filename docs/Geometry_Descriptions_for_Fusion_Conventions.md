@@ -315,11 +315,55 @@ _data_variable_.
 
 ### poloidal_line
 
-TO-DO
+**Use case:**
+
+This geometry type is used to describe an axisymmetric surface. Since each cross-section in the r,z-plane is the same for this geometry, it is sufficient to describe it by a collection of connected line-segments in the r,z-plane.
+
+**Extra requirements:**
+
+The required attributes of this type are exactly the same as with the geometric
+type 'line'. The only difference is that the attribute `node_coordinates` SHOULD
+not contain a variable whose attribute `standard_name` has value '_azimuth'.
+
+Note: if the first point coincides with the last point then the resulting geometry is not equivalent with the type [poloidal_polygon](#poloidal_polygon), as this would result in a infinitly thin tube-like geometry whereas the type [poloidal_polygon](#poloidal_polygon) is used to describe volumes.
+
+**Example**
+
+    dimensions:
+        device = 3;
+        time = 2;
+        node = 15;
+
+
+    variables:
+        double field_value(time, device);
+            diverter:geometry = "some_geometry_container";
+        
+        int some_geometry_container;
+            some_geometry_container:geometry_type = "poloidal_line";
+            some_geometry_container:node_coordinates = "r z" ;
+            some_geometry_container:node_count = "some_node_count";
+
+        int some_node_count(device)
+
+        double r(node);
+            r:standard_name = "_r_axis";
+        
+        double z(node);
+            z:standard_name = "_z_axis";
 
 ### poloidal_polygon
 
-TO-DO
+**Use case:**
+
+
+
+**Extra requirements:**
+
+
+
+**Example**
+
 
 ## Geometries containing Multiple parts
 

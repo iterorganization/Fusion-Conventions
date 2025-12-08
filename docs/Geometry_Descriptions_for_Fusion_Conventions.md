@@ -323,19 +323,21 @@ TO-DO
 
 ## Geometries containing Multiple parts
 
+**Use case:**
+
 If the geometry consists of several disconnected parts of the same
 `geometry_type`, then the _geometry_container_ MUST contain the attribute
 `part_node_count`.
 
- and  the data structure MUST have a dimension `part`.
+**Requirements:**
 
-The attribute `part_node_count` contains the name of the int-valued variable
+The attribute `part_node_count` contains the name of the integer-valued variable
 that represents the number of nodes per part. The dimension of this variable
-SHOULD be different from the dimension of the variables mentioned in
-`node_coordinates`.
+SHOULD be different from the dimension of the variables mentioned in both
+`node_coordinates` and `node_count`.
 
 Note: which parts belong together can be infered from the corresponding
-int-values in the variables of `node_count` and `part_node_count`.
+integer-values in the variables of `node_count` and `part_node_count`.
 
 **Example**
 
@@ -361,6 +363,8 @@ int-values in the variables of `node_count` and `part_node_count`.
         int node_count(device);
 
         int part_node_count(part); // Number of nodes per part.
+        // Which parts belong to which device can be infered from node_count and 
+        // part_node_count together.
 
         double r(node);
             r:units = "m";
@@ -370,9 +374,22 @@ int-values in the variables of `node_count` and `part_node_count`.
             z:units = "m";
             z:standard_name = "_height";
 
-## Holes in geometry polygon
+## Holes in the geometry
 
-TO-DO
+**Use case:**
+
+In case the geometry of types 'polygon' or 'poloidal_polygon' consist of holes,
+then the _geometry_container_ MUST contain the attributes `part_node_count` and `interior`.
+
+**Extra requirements:**
+
+The attribute `part_node_count` contains the name of the integer-valued variable
+that represents the number of nodes per part, and the attribute `interior`
+contains the name of the integer-valued variable that indicates which part is
+condisidered as the interior of the geometry (value 0) and which part is considered
+exterior (value 1). Both these variables MUST have the same dimension.
+
+Each part of the geometry denoting the exterior of the geometry MUST be completely contained by and in the same plane as another part representing the interior.
 
 **Example**
 
@@ -391,17 +408,15 @@ TO-DO
             area:standard_name = "_cross_sectional_area_of_element";
         
         int geometry_container ;
-            geometry_container:geometry_type = "polygon";
+            geometry_container:geometry_type = "poloidal_polygon";
             geometry_container:node_count = "node_count" ;
-            geometry_container:node_coordinates = "r phi z" ;
+            geometry_container:node_coordinates = "r z" ;
             geometry_container:part_node_count = "part_node_count" ;
-            geometry_container:interior_ring = "interior_ring" ;
+            geometry_container:interior = "interior_ring" ;
 
         int node_count(device);
 
         int part_node_count(part); // Number of nodes per part.
-        // Which parts belong to which device can be infered from node_count and 
-        // part_node_count together.
 
         int interior_ring(part); // Indicates whether surface enclosed by part is 
         // considered included (0) or excluded (1)

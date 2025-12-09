@@ -356,7 +356,7 @@ Note: if the first point coincides with the last point then the resulting geomet
 
 **Use case:**
 
-This geometry type is used to describe an axisymmetric volumes. Since each cross-section in the r,z-plane is the same for this geometry, it is sufficient to describe it by a polygon in the r,z-plane.
+This geometry type is used to describe an axisymmetric volume. Since each cross-section in the r,z-plane is the same for this geometry, it is sufficient to describe it by a polygon in the r,z-plane.
 
 **Extra requirements:**
 
@@ -378,10 +378,15 @@ If the geometry consists of several disconnected parts of the same
 The attribute `part_node_count` contains the name of the integer-valued variable
 that represents the number of nodes per part. The dimension of this variable
 SHOULD be different from the dimension of the variables mentioned in both
-`node_coordinates` and `node_count`.
+`node_coordinates` and, if present, `node_count`.
 
 Note: which parts belong together can be infered from the corresponding
 integer-values in the variables of `node_count` and `part_node_count`.
+
+Note: whenever the geometry consists of multiple disconnected points, then the
+_geometry_container_ SHOULD not have the attribute `node_count`. In this case,
+the variable mentioned in the attribute `part_node_count` MUST have the same
+dimension as the variables mentioned in the attribute `node_coordinates`.
 
 **Example**
 
@@ -489,3 +494,26 @@ Each part of the geometry denoting the exterior of the geometry MUST be complete
             1.2, 1.2, 0.7, 0.7,
             8.2, 7.0, 7.6,
             7.9, 7.3, 7.5;
+
+## Adding labels to the geometry
+
+**Use case:**
+
+If one wants to add a label to a geometry (which could be usefull for plotting),
+then this is possible by including the attribute `label` in the
+_geometry_container_.
+
+**Extra requirements:**
+
+If the _geometry_container_ has the attribute `label`, then the string-value of
+this attribute MUST be the name of a string-valued variable. The dimension of this variable depends on the geometry type and on the presence of the attribute `part_node_count`.
+
+- In case of type [`point`](#point) and the attribute `part_node_count` being
+  absent, the dimension MUST be the same as the dimension of the variables
+  mentioned in the attribute `node_coordinates`.
+- In case of type [`point`](#point) and the attribute `part_node_count` being
+  present, the dimension MUST be the same as the dimension of the variables
+  mentioned in the attribute `part_node_count`.
+- For all other types, independent of the presence of `part_node_count`, the
+  dimension of this variable MUST be the same as the dimension of the variable
+  mentioned in attribute `node_count`.

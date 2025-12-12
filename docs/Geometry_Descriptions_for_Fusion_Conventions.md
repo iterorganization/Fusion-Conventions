@@ -4,7 +4,7 @@ This document describes how to attach geometric data to a variable in a netCDF
 file. For convience, this variable will be referred to as _data_variable_.
 
 The _data_variable_ MUST have an attribute `geometry`. The string-value of this
-attribute MUST be equal to the name of a 0 dimensional variable in the data
+attribute MUST be equal to the name of a 0-dimensional variable in the data
 structure, which we will refer to as the _geometry_container_. Note that
 multiple data variables may refer to the same _geometry_container_.
 
@@ -17,10 +17,10 @@ The string-value of the attribute `node_coordinates` contains the names of the
 variables in the data structure that hold the actual geometric data, all
 separated by a single space. Each of
 these variables must hold an attribute `standard_name`, indicating which
-cylindrical coordinate this variable represents. The value of this attribute
+spatial coordinate this variable represents. The value of this attribute
 MUST differ for each of these variables.
 
-Space coordinates are described using the  cylindrical coordinate system, unless
+Space coordinates are described using the cylindrical coordinate system, unless
 explicitly specified otherwise.
 
 The attribute `geometry_type` indicates how to interpret the geometric data.
@@ -66,13 +66,13 @@ _data_variable_.
             some_geometry_container:node_coordinates = "r phi z" ;
 
         double r(b_field_pol_probe);
-            r:standard_name = "_r_axis";
+            r:standard_name = "_radial_distance";
 
         double phi(b_field_pol_probe);
-            phi:standard_name = "_phi_axis";
+            phi:standard_name = "_azimuth";
         
         double z(b_field_pol_probe);
-            z:standard_name = "_z_axis";
+            z:standard_name = "_vertical_distance";
 
 ### unit_vector
 
@@ -90,11 +90,11 @@ In this case, the geometry_container MUST also have an attribute
 The point in space from which this unit vector starts, is described by the 3
 variables in `node_coordinates`.
 
-The direction of the unit vector is described by the 2 variables in
-`node_orientations`, where the first variable describes the angle between the
-normal vector and the phi,z-plane in increasing phi direction, and the
-second variable describes the angle between the normal vector and the horizontal
-r,z-plane in increasing r direction.
+The direction of the unit vector is described by the two variables whose name is
+mentioned in `node_orientations`, seperated by a single space. These variables
+represent the _normal_poloidal_angle and _normal_toroidal_angle, and MUST have
+an attribute `standard_name` with value "_normal_poloidal_angle" and
+"_normal_toroidal_angle", respectively.
 
 Each of the dimensions of the variables mentioned in the attributes
 `node_coordinates` and `node_orientations` of the _geometry_container_ MUST also
@@ -115,17 +115,19 @@ be a dimension of _data_variable_.
             some_geometry_container:node_orientations = "angle_normal_poloidal angle_normal_toroidal" ;
 
         double r(b_field_pol_probe);
-            r:standard_name = "_r_axis";
+            r:standard_name = "_radial_distance";
 
         double phi(b_field_pol_probe);
-            phi:standard_name = "_phi_axis";
+            phi:standard_name = "_azimuth";
         
         double z(b_field_pol_probe);
-            z:standard_name = "_z_axis";
+            z:standard_name = "_vertical_distance";
 
         double angle_normal_poloidal(b_field_pol_probe);
+            angle_normal_poloidal:standard_name = "_normal_poloidal_angle";
 
         double angle_normal_toroidal(b_field_pol_probe);
+            angle_normal_toroidal:standard_name = "_normal_toroidal_angle";
 
 ### line
 
@@ -178,13 +180,13 @@ segment. For the description of disconnected line segments, see section [Geometr
         int some_node_count(device);
 
         double r(node);
-            r:standard_name = "_r_axis";
+            r:standard_name = "_radial_distance";
 
         double phi(node);
-            phi:standard_name = "_phi_axis";
+            phi:standard_name = "_azimuth";
         
         double z(node);
-            z:standard_name = "_z_axis";
+            z:standard_name = "_vertical_distance";
     data:
         node_count = 5, 4, 6;
         r = 3.57187, 3.57186, 3.57186, 3.57187, 3.57187, 3.57186, 3.57186,
@@ -236,19 +238,19 @@ to repeat the first node at the end of this sequence.
             r:standard_name = "_major_radius";
             r:description = "Major radius";
             r:units = "m";
-            r:standard_name = "_r_axis";
+            r:standard_name = "_radial_distance";
 
         double phi(node);
             phi:standard_name = "_toroidal_angle";
             phi:description = "Toroidal angle (oriented counter-clockwise when viewing from above)";
             phi:units = "rad";
-            phi:standard_name = "_phi_axis";
+            phi:standard_name = "_azimuth";
         
         double z(node);
             z:standard_name = "_height";
             z:description = "Height";
             z:units = "m";
-            z:standard_name = "_z_axis";
+            z:standard_name = "_vertical_distance";
             
     data:
         time = 0.34, 0.67, 1.0, 1.34, 1.67;
@@ -301,10 +303,10 @@ _data_variable_.
             some_geometry_container:node_coordinates = "r z" ;
 
         double r(flux_loop);
-            r:standard_name = "_r_axis";
+            r:standard_name = "_radial_distance";
         
         double z(flux_loop);
-            z:standard_name = "_z_axis";
+            z:standard_name = "_vertical_distance";
     data:
         flux = 10.4, 10.6, 9.9,
             10.2, 10.4, 9.7;
@@ -323,11 +325,13 @@ TO-DO
 
 ## Geometries containing Multiple parts
 
+TO-DO
+
 If the geometry consists of several disconnected parts of the same
 `geometry_type`, then the _geometry_container_ MUST contain the attribute
 `part_node_count`.
 
- and  the data structure MUST have a dimension `part`.
+ and the data structure MUST have a dimension `part`.
 
 The attribute `part_node_count` contains the name of the int-valued variable
 that represents the number of nodes per part. The dimension of this variable

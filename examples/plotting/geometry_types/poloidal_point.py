@@ -8,11 +8,15 @@ logger = logging.getLogger(__name__)
 
 
 class PoloidalPoint(GeometryType):
-    def load(self, num_phi=20):
-        r = self.get_coordinate_from_standard_name("node_coordinates", "_major_radius")
-        z = self.get_coordinate_from_standard_name("node_coordinates", "_height")
+    def load(self, *, num_phi=20, max_phi=360, **kwargs):
+        r = self.get_coordinate_from_standard_name(
+            "node_coordinates", "_radial_distance"
+        )
+        z = self.get_coordinate_from_standard_name(
+            "node_coordinates", "_vertical_distance"
+        )
 
-        phis = np.linspace(0, 2 * np.pi, num_phi, endpoint=True)
+        phis = np.linspace(0, np.radians(max_phi), num_phi, endpoint=True)
         self.data = []
 
         for i in range(len(r)):

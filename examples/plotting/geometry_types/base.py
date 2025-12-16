@@ -5,11 +5,11 @@ import pyvista as pv
 
 
 class GeometryType(ABC):
-    def __init__(self, ds, geom_container):
+    def __init__(self, ds, geom_container, **kwargs):
         self.ds = ds
         self.geom_container = geom_container
         self.data = None
-        self.load()
+        self.load(**kwargs)
 
     def get_coordinate_from_standard_name(self, coordinates_name, standard_name):
         # FIXME: This is not a nice way to deal with standard coordinates, expensive
@@ -29,7 +29,7 @@ class GeometryType(ABC):
         return poly
 
     @abstractmethod
-    def load(self):
+    def load(self, **kwargs):
         pass
 
     @abstractmethod

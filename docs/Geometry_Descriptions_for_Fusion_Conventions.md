@@ -3,12 +3,12 @@
 This document describes how to attach geometric data to a variable in a netCDF
 file. For convience, this variable will be referred to as _data_variable_.
 
-The _data_variable_ MUST have an attribute `geometry`. The string-value of this
-attribute MUST be equal to the name of a 0 dimensional variable in the data
+The _data_variable_ must have an attribute `geometry`. The string-value of this
+attribute must be equal to the name of a 0-dimensional variable in the data
 structure, which we will refer to as the _geometry_container_. Note that
 multiple data variables may refer to the same _geometry_container_.
 
-The _geometry_container_ MUST have at least the following two attributes
+The _geometry_container_ must have at least the following two attributes
 
 - `node_coordinates`,
 - `geometry_type`.
@@ -16,12 +16,9 @@ The _geometry_container_ MUST have at least the following two attributes
 The string-value of the attribute `node_coordinates` contains the names of the
 variables in the data structure that hold the actual geometric data, all
 separated by a single space. Each of
-these variables MUST hold an attribute `standard_name`, indicating which
-cylindrical coordinate this variable represents. The value of this attribute
-MUST differ for each of these variables.
-
-Space coordinates are described using the  cylindrical coordinate system, unless
-explicitly specified otherwise.
+these variables must hold an attribute `standard_name`, indicating which
+spatial coordinate this variable represents. The value of this attribute
+must differ for each of these variables.
 
 The attribute `geometry_type` indicates how to interpret the geometric data.
 Based on the value of this attribute the _geometry_container_ should have other
@@ -49,7 +46,7 @@ point-measurements of scalar quantities, such as temperature.
 The _geometry_container_ does not need any extra attributes for this geometry type.
 
 Each of the dimensions of the variables mentioned in the attribute
-`node_coordinates` of the _geometry_container_ MUST also be a dimension of
+`node_coordinates` of the _geometry_container_ must also be a dimension of
 _data_variable_.
 
 **Example**
@@ -66,13 +63,13 @@ _data_variable_.
             some_geometry_container:node_coordinates = "r phi z" ;
 
         double r(b_field_pol_probe);
-            r:standard_name = "_r_axis";
+            r:standard_name = "_radial_distance";
 
         double phi(b_field_pol_probe);
-            phi:standard_name = "_phi_axis";
+            phi:standard_name = "_azimuth";
         
         double z(b_field_pol_probe);
-            z:standard_name = "_z_axis";
+            z:standard_name = "_vertical_distance";
 
 ### unit_vector
 
@@ -84,20 +81,20 @@ magnetic fields.
 
 **Extra requirements:**
 
-In this case, the geometry_container MUST also have an attribute
+In this case, the geometry_container must also have an attribute
 `node_orientations`.
 
 The point in space from which this unit vector starts, is described by the 3
 variables in `node_coordinates`.
 
-The direction of the unit vector is described by the 2 variables in
-`node_orientations`, where the first variable describes the angle between the
-normal vector and the phi,z-plane in increasing phi direction, and the
-second variable describes the angle between the normal vector and the horizontal
-r,z-plane in increasing r direction.
+The direction of the unit vector is described by the two variables whose name is
+mentioned in `node_orientations`, seperated by a single space. These variables
+represent the _normal_poloidal_angle and _normal_toroidal_angle, and must have
+an attribute `standard_name` with value "_normal_poloidal_angle" and
+"_normal_toroidal_angle", respectively.
 
 Each of the dimensions of the variables mentioned in the attributes
-`node_coordinates` and `node_orientations` of the _geometry_container_ MUST also
+`node_coordinates` and `node_orientations` of the _geometry_container_ must also
 be a dimension of _data_variable_.
 
 **Example**
@@ -115,17 +112,19 @@ be a dimension of _data_variable_.
             some_geometry_container:node_orientations = "angle_normal_poloidal angle_normal_toroidal" ;
 
         double r(b_field_pol_probe);
-            r:standard_name = "_r_axis";
+            r:standard_name = "_radial_distance";
 
         double phi(b_field_pol_probe);
-            phi:standard_name = "_phi_axis";
+            phi:standard_name = "_azimuth";
         
         double z(b_field_pol_probe);
-            z:standard_name = "_z_axis";
+            z:standard_name = "_vertical_distance";
 
         double angle_normal_poloidal(b_field_pol_probe);
+            angle_normal_poloidal:standard_name = "_normal_poloidal_angle";
 
         double angle_normal_toroidal(b_field_pol_probe);
+            angle_normal_toroidal:standard_name = "_normal_toroidal_angle";
 
 ### line
 
@@ -135,21 +134,21 @@ This geometric type describes connected line segments in 3D cartesian space. Eac
 
 **Extra requirements:**
 
-In this case, the _geometry_container_ MUST also have an attribute `node_count`.
+In this case, the _geometry_container_ must also have an attribute `node_count`.
 
 The 1D variables described in the attribute `node_coordinates` of the geometry
-container MUST have the same dimension, which will be refered to as their _node_
+container must have the same dimension, which will be refered to as their _node_
 dimension. These 1D variables describe the space coordinates of each 'node'.
 
-The string-value of the attribute `node_count` MUST be the name of an
-integer-valued variable in the data structure, where each of its dimensions MUST
+The string-value of the attribute `node_count` must be the name of an
+integer-valued variable in the data structure, where each of its dimensions must
 also be a dimension of the corresponding variable _data_variable_.
 
-Furthermore, this variable MUST return the number of nodes required to describe
+Furthermore, this variable must return the number of nodes required to describe
 the collection of connected line segments associated with a particular value in
 _data_variable_. This number corresponds with the number of consecutive entries
 in the 1D variables described in the attribute `node_coordinates`. It follows
-that each such numbers SHOULD be greater than 1.
+that each such numbers should be greater than 1.
 
 Considering two consecutive nodes, the first node represents the beginning of a
 line segment and the second node represents the end of this line segment.
@@ -178,13 +177,13 @@ segment. For the description of disconnected line segments, see section [Geometr
         int some_node_count(device);
 
         double r(node);
-            r:standard_name = "_r_axis";
+            r:standard_name = "_radial_distance";
 
         double phi(node);
-            phi:standard_name = "_phi_axis";
+            phi:standard_name = "_azimuth";
         
         double z(node);
-            z:standard_name = "_z_axis";
+            z:standard_name = "_vertical_distance";
     data:
         node_count = 5, 4, 6;
         r = 3.57187, 3.57186, 3.57186, 3.57187, 3.57187, 3.57186, 3.57186,
@@ -233,22 +232,22 @@ to repeat the first node at the end of this sequence.
         int node_count(flux_loop);
 
         double r(node);
-            r:standard_name = "_major_radius";
+            r:standard_name = "_radial_distance";
             r:description = "Major radius";
             r:units = "m";
-            r:standard_name = "_r_axis";
+            r:standard_name = "_radial_distance";
 
         double phi(node);
-            phi:standard_name = "_toroidal_angle";
+            phi:standard_name = "_azimuth";
             phi:description = "Toroidal angle (oriented counter-clockwise when viewing from above)";
             phi:units = "rad";
-            phi:standard_name = "_phi_axis";
+            phi:standard_name = "_azimuth";
         
         double z(node);
-            z:standard_name = "_height";
+            z:standard_name = "_vertical_distance";
             z:description = "Height";
             z:units = "m";
-            z:standard_name = "_z_axis";
+            z:standard_name = "_vertical_distance";
             
     data:
         time = 0.34, 0.67, 1.0, 1.34, 1.67;
@@ -283,7 +282,7 @@ point in the r,z-plane.
 The _geometry_container_ does not need any additional attributes.
 
 Each of the dimensions of the variables mentioned in the attribute
-`node_coordinates` of the _geometry_container_ MUST also be a dimension of
+`node_coordinates` of the _geometry_container_ must also be a dimension of
 _data_variable_.
 
 **Example**
@@ -301,10 +300,10 @@ _data_variable_.
             some_geometry_container:node_coordinates = "r z" ;
 
         double r(flux_loop);
-            r:standard_name = "_r_axis";
+            r:standard_name = "_radial_distance";
         
         double z(flux_loop);
-            z:standard_name = "_z_axis";
+            z:standard_name = "_vertical_distance";
     data:
         flux = 10.4, 10.6, 9.9,
             10.2, 10.4, 9.7;
@@ -370,7 +369,7 @@ SHOULD not contain a variable whose attribute `standard_name` has value
 **Use case:**
 
 If the geometry consists of several disconnected parts of the same
-`geometry_type`, then the _geometry_container_ MUST contain the attribute
+`geometry_type`, then the _geometry_container_ must contain the attribute
 `part_node_count`.
 
 **Requirements:**
@@ -417,11 +416,11 @@ dimension as the variables mentioned in the attribute `node_coordinates`.
 
         double r(node);
             r:units = "m";
-            r:standard_name = "_major_radius";
+            r:standard_name = "_radial_distance";
         
         double z(node);
             z:units = "m";
-            z:standard_name = "_height";
+            z:standard_name = "_vertical_distance";
 
 ## Holes in the geometry
 
@@ -472,11 +471,11 @@ Each part of the geometry denoting the exterior of the geometry MUST be complete
 
         double r(node);
             r:units = "m";
-            r:standard_name = "_major_radius";
+            r:standard_name = "_radial_distance";
         
         double z(node);
             z:units = "m";
-            z:standard_name = "_height";
+            z:standard_name = "_vertical_distance";
 
 
     data:

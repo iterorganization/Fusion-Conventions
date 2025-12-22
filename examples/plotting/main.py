@@ -1,5 +1,3 @@
-import numpy as np
-
 from plotter import Plotter
 
 # ITER

@@ -29,7 +29,11 @@ class Plotter:
 
     def add(self, quantity_name, **kwargs):
         quantity = self.ds[quantity_name]
-        geom_container = self.ds[quantity.geometry]
+        try:
+            geom_container = self.ds[quantity.geometry]
+        except AttributeError:
+            logger.error(f"{quantity.name} does not have a geometry container")
+            return
 
         geom_type = geom_container.geometry_type
         if geom_type not in self.GEOMETRY_MAP:

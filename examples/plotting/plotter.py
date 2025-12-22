@@ -8,6 +8,7 @@ from geometry_types.poloidal_polygon import PoloidalPolygon
 from geometry_types.polygon import Polygon
 from geometry_types.unit_vector import UnitVector
 
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
@@ -26,6 +27,11 @@ class Plotter:
         )
         self.plotter = pv.Plotter()
         logger.debug(self.ds)
+        geom_containers = self.find_geom_containers()
+        logger.info(
+            f"{dataset} contains the following quantities with geometry containers:\n"
+            f"{geom_containers}\n"
+        )
 
     def add(self, quantity_name, **kwargs):
         quantity = self.ds[quantity_name]
@@ -45,3 +51,10 @@ class Plotter:
 
     def show(self):
         self.plotter.show()
+
+    def find_geom_containers(self):
+        return [
+            name
+            for name, da in self.ds.data_vars.items()
+            if hasattr(da, "geometry") and da.geometry in self.ds
+        ]

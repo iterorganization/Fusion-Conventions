@@ -2,6 +2,7 @@ import logging
 
 import pyvista as pv
 import xarray as xr
+from geometry_types.point import Point
 
 from geometry_types.poloidal_point import PoloidalPoint
 from geometry_types.poloidal_polygon import PoloidalPolygon
@@ -15,6 +16,7 @@ logger = logging.getLogger(__name__)
 class Plotter:
     GEOMETRY_MAP = {
         "unit_vector": UnitVector,
+        "point": Point,
         "polygon": Polygon,
         "poloidal_point": PoloidalPoint,
         "poloidal_polygon": PoloidalPolygon,
@@ -43,7 +45,8 @@ class Plotter:
 
         geom_type = geom_container.geometry_type
         if geom_type not in self.GEOMETRY_MAP:
-            logger.error(f"{geom_type} not in geometry map.")
+            logger.error(f"{geom_type!r} not in geometry map.")
+            return
 
         geometry_cls = self.GEOMETRY_MAP[geom_type]
         geometry = geometry_cls(self.ds, geom_container, **kwargs)

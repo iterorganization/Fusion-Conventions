@@ -1,7 +1,7 @@
 # [DRAFT] Geometry Descriptions for Fusion Conventions
 
-This document describes how to attach geometric data to a variable in a netCDF
-file. For convience, this variable will be referred to as _data_variable_.
+This document describes how to attach geometric data to a labeled N-dimensional
+array. For convience, this variable will be referred to as _data_variable_.
 
 The _data_variable_ must have an attribute `geometry`. The string-value of this
 attribute must be equal to the name of a 0-dimensional variable in the data

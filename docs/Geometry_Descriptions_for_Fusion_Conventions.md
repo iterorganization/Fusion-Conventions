@@ -511,7 +511,9 @@ _geometry_container_.
 **Extra requirements:**
 
 If the _geometry_container_ has the attribute `label`, then the string-value of
-this attribute must be the name of a string-valued variable. The dimension of this variable depends on the geometry type and on the presence of the attribute `part_node_count`.
+this attribute must be the name of a string-valued variable. The dimension of
+this variable depends on the geometry type and on the presence of the attribute
+`part_node_count`.
 
 - In case of type [`point`](#point) and the attribute `part_node_count` being
   absent, the dimension must be the same as the dimension of the variables
@@ -526,3 +528,24 @@ this attribute must be the name of a string-valued variable. The dimension of th
 ## More specific geometry information
 
 [TO-DO]
+
+**Use case:**
+
+If one wants to add more specific geometry information, then this possible by
+including the attribute `specific_shape` in the _geometry_container_. This could
+be usefull when the geometry in question contains curvature, as in the case of circles
+and annuli, and the available geometry types only approximate this geometry.
+
+The attribute `specific_shape` allows applications to obtain more accurate
+geometry information without parsing all variables attached to the
+_geometry_container_.
+
+Note that only a limited collection of geometry shapes can be described using
+this attribute.
+
+**Extra requirements:**
+
+If the _geometry_container_ has the attribute `specific_shape`, then the
+string-value of this attribute must be the name of a 2D double-valued variable.
+The dimension of this variable must be the same as the dimension of
+_data_variable_.

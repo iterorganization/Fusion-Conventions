@@ -527,18 +527,15 @@ this variable depends on the geometry type and on the presence of the attribute
 
 ## More specific geometry information
 
-[TO-DO]
-
 **Use case:**
 
-If one wants to add more specific geometry information, then this possible by
-including the attribute `specific_shape` in the _geometry_container_. This could
-be usefull when the geometry in question contains curvature, as in the case of circles
-and annuli, and the available geometry types only approximate this geometry.
-
-The attribute `specific_shape` allows applications to obtain more accurate
+If one wants to add more specific geometry information to a geometry of type
+[`poloidal_line`](#poloidal_line) or [`poloidal_polygon`](#poloidal_polygon),
+then this is possible by including the attribute `specific_shape` in the
+_geometry_container_. This attribute allows applications to obtain more accurate
 geometry information without parsing all variables attached to the
-_geometry_container_.
+_geometry_container_, especially when the actual geometry contains
+curvature as in the case of circles and annuli.
 
 Note that only a limited collection of geometry shapes can be described using
 this attribute.
@@ -546,6 +543,39 @@ this attribute.
 **Extra requirements:**
 
 If the _geometry_container_ has the attribute `specific_shape`, then the
-string-value of this attribute must be the name of a 2D double-valued variable.
-The dimension of this variable must be the same as the dimension of
-_data_variable_.
+string-value of this attribute must be the name of a 2D float-valued variable.
+The size of the second axis of this variable must be equal to 5, where the
+first entry of each length-5 array represents an integer identifier determining
+the meaning of the other four entries. This identifier will be refered to as the
+_shape_identifier_. The dimension of this variable must be the same as the
+dimension of the variable mentioned in attribute `node_count`.
+
+The variable mentioned in the attribute `specific_shape` may contain 'NaN'
+values, such that not every value of _shape_identifier_ should require the use
+of all four other entries and not every geometry needs to be associated with a
+specific geometry shape.
+
+Valid values for _shape_identifier_ are the
+following
+
+- 1, represents a rectangle,
+- 2, represents an annulus.
+
+
+Consider a length-5 array of the variable mentioned in the attribute
+`specific_shape`: _[_shape_identifier_, x_1, x_2, x_3, x_4]_. The values of
+_x_i_ represent the following based on the value of _shape_identifier_
+
+**_shape_identifier_ = 1**
+
+- x_1: _radial_distance of the centre
+- x_2: _vertical_distance of the centre
+- x_3: width of rectangle with respect to the coordinate _radial_distance
+- x_4: height of rectangle with respect to the coordinate _vertical_distance
+
+**_shape_identifier_ = 2**
+
+- x_1: _radial_distance of the centre
+- x_2: _vertical_distance of the centre
+- x_3: inner radius
+- x_4: outer radius

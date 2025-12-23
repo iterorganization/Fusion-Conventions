@@ -2,23 +2,26 @@ import logging
 
 import numpy as np
 
-from .base import GeometryType
+from ..base import GeometryType
 
 logger = logging.getLogger(__name__)
 
 
 class PoloidalPolygon(GeometryType):
-    def load(self, *, max_phi=270, num_phi=20, **kwargs):
-        r = self.get_coordinate_from_standard_name(
+    def load(self, *, max_phi=2 * np.pi, num_phi=20, **kwargs):
+        r = self._get_coordinate_from_standard_name(
             "node_coordinates", "_radial_distance"
         )
-        z = self.get_coordinate_from_standard_name(
+        z = self._get_coordinate_from_standard_name(
             "node_coordinates", "_vertical_distance"
         )
 
-        part_starts, part_ends, node_starts, node_ends = self.get_part_node_start_ends()
+        # TODO: implement exterior/interior nodes
+        part_starts, part_ends, node_starts, node_ends = (
+            self._get_part_node_start_ends()
+        )
 
-        self.data = []
+        self._data = []
 
         for part_start, part_end in zip(part_starts, part_ends):
             parts = []
@@ -36,24 +39,19 @@ class PoloidalPolygon(GeometryType):
 
                 points = np.column_stack([ring_r, np.zeros_like(ring_r), ring_z])
 
-                polyline = self.polyline_from_points(points)
+                polyline = self._polyline_from_points(points)
 
                 surface = polyline.extrude_rotate(
-                    angle=max_phi,
+                    angle=np.degrees(max_phi),
                     resolution=num_phi,
-                    rotation_axis=(0, 0, 1),
-                    capping=True,
+                    capping=False,
                 )
 
                 parts.append(surface)
 
-            self.data.append(parts)
+            self._data.append(parts)
 
-    def plot(self, plotter):
-        if not self.data:
-            logger.error("Geometry not loaded")
-            return
-
-        for parts in self.data:
+    def _plot_impl(self, plotter):
+        for parts in self._data:
             for surface in parts:
                 plotter.add_mesh(surface, opacity=1.0, show_edges=True)

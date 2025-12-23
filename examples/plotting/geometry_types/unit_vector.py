@@ -10,18 +10,18 @@ logger = logging.getLogger(__name__)
 
 class UnitVector(GeometryType):
     def load(self, **kwargs):
-        r = self.get_coordinate_from_standard_name(
+        r = self._get_coordinate_from_standard_name(
             "node_coordinates", "_radial_distance"
         )
-        phi = self.get_coordinate_from_standard_name("node_coordinates", "_azimuth")
-        z = self.get_coordinate_from_standard_name(
+        phi = self._get_coordinate_from_standard_name("node_coordinates", "_azimuth")
+        z = self._get_coordinate_from_standard_name(
             "node_coordinates", "_vertical_distance"
         )
 
-        pol_angle = self.get_coordinate_from_standard_name(
+        pol_angle = self._get_coordinate_from_standard_name(
             "node_orientations", "_normal_poloidal_angle"
         )
-        tor_angle = self.get_coordinate_from_standard_name(
+        tor_angle = self._get_coordinate_from_standard_name(
             "node_orientations", "_normal_toroidal_angle"
         )
         # FIXME: Sometimes angles are not filled, but they should
@@ -30,7 +30,6 @@ class UnitVector(GeometryType):
         if tor_angle is None:
             tor_angle = np.zeros_like(r)
 
-        # Convert from cylindrical to cartesian
         x = r * np.cos(phi)
         y = r * np.sin(phi)
 
@@ -40,24 +39,19 @@ class UnitVector(GeometryType):
         dz = -np.sin(pol_angle)
 
         vec = np.column_stack((dx, dy, dz))
-        norm = np.linalg.norm(vec, axis=1)
-        unit_vec = vec / norm[:, None]
+        norm = np.linalg.norm(vec, axis=1, keepdims=True)
+        unit_vec = vec / norm
 
         # Plot unit vectors as points plus direction vector
-        self.data = pv.PolyData(np.column_stack((x, y, z)))
-        self.data["vectors"] = unit_vec
+        self._data = pv.PolyData(np.column_stack((x, y, z)))
+        self._data["vectors"] = unit_vec
 
-    def plot(self, plotter):
-        if not self.data:
-            logger.error(
-                "Cannot plot data, it must be loaded from the geometry container first"
-            )
-            return
+    def _plot_impl(self, plotter):
         plotter.add_arrows(
-            self.data.points, self.data["vectors"], color="grey", mag=0.6
+            self._data.points, self._data["vectors"], color="grey", mag=0.6
         )
         plotter.add_mesh(
-            self.data,
+            self._data,
             point_size=8,
             render_points_as_spheres=True,
         )

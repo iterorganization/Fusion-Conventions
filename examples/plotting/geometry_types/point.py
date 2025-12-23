@@ -10,32 +10,22 @@ logger = logging.getLogger(__name__)
 
 class Point(GeometryType):
     def load(self, **kwargs):
-        r = self.get_coordinate_from_standard_name(
+        r = self._get_coordinate_from_standard_name(
             "node_coordinates", "_radial_distance"
         )
-        phi = self.get_coordinate_from_standard_name("node_coordinates", "_azimuth")
-        z = self.get_coordinate_from_standard_name(
+        phi = self._get_coordinate_from_standard_name("node_coordinates", "_azimuth")
+        z = self._get_coordinate_from_standard_name(
             "node_coordinates", "_vertical_distance"
         )
-        self.data = []
+        x = r * np.cos(phi)
+        y = r * np.sin(phi)
 
-        for i in range(len(r)):
-            x_i = r[i] * np.cos(phi[i])
-            y_i = r[i] * np.sin(phi[i])
-            z_i = z[i]
+        points = np.column_stack((x, y, z))
+        self._data = pv.PolyData(points)
 
-            points = np.column_stack((x_i, y_i, z_i))
-            self.data.append(pv.PolyData(points))
-
-    def plot(self, plotter):
-        if not self.data:
-            logger.error(
-                "Cannot plot data, it must be loaded from the geometry container first"
-            )
-            return
-        for polydata in self.data:
-            plotter.add_mesh(
-                polydata,
-                render_points_as_spheres=True,
-                point_size=6,
-            )
+    def _plot_impl(self, plotter):
+        plotter.add_mesh(
+            self._data,
+            render_points_as_spheres=True,
+            point_size=6,
+        )

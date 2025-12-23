@@ -1,38 +1,58 @@
+import logging
 from abc import ABC, abstractmethod
 
 import numpy as np
 import pyvista as pv
 
+logger = logging.getLogger(__name__)
+
 
 class GeometryType(ABC):
-    def __init__(self, ds, geom_container, **kwargs):
-        self.ds = ds
-        self.geom_container = geom_container
-        self.data = None
-        self.load(**kwargs)
+    def __init__(self, ds, geom_container):
+        self._ds = ds
+        self._geom_container = geom_container
+        self._data = None
 
-    def get_coordinate_from_standard_name(self, coordinates_name, standard_name):
+    def plot(self, plotter):
+        if self._data is None:
+            logger.error(
+                "Cannot plot data, it must be loaded from the geometry container first"
+            )
+            return
+        self._plot_impl(plotter)
+
+    @abstractmethod
+    def load(self, **kwargs):
+        pass
+
+    @abstractmethod
+    def _plot_impl(self, plotter):
+        pass
+
+    def _get_coordinate_from_standard_name(self, coordinates_name, standard_name):
         # FIXME: This is not a nice way to deal with standard coordinates, expensive
-        coordinate_names = self.geom_container.attrs[coordinates_name].split()
+        coordinate_names = self._geom_container.attrs[coordinates_name].split()
         for coordinate_name in coordinate_names:
-            coordinate = self.ds[coordinate_name]
+            coordinate = self._ds[coordinate_name]
             if coordinate.standard_name == standard_name:
                 return coordinate.values
         raise KeyError(f"{standard_name} does not appear in {coordinates_name}.")
 
-    def polyline_from_points(self, points):
-        poly = pv.PolyData()
-        poly.points = points
-        cell = np.arange(0, len(points), dtype=np.int_)
-        cell = np.insert(cell, 0, len(points))
-        poly.lines = cell
+    def _polyline_from_points(self, points):
+        n = len(points)
+        lines = np.empty(n + 1, dtype=np.int64)
+        lines[0] = n
+        lines[1:] = np.arange(n)
+
+        poly = pv.PolyData(points)
+        poly.lines = lines
         return poly
 
-    def get_part_node_start_ends(self):
-        node_count = self.ds[self.geom_container.node_count].values.astype(int)
+    def _get_part_node_start_ends(self):
+        node_count = self._ds[self._geom_container.node_count].values
 
-        if "part_node_count" in self.geom_container.attrs:
-            part_node_count = self.ds[self.geom_container.part_node_count].values
+        if "part_node_count" in self._geom_container.attrs:
+            part_node_count = self._ds[self._geom_container.part_node_count].values
         else:
             part_node_count = node_count
 
@@ -47,11 +67,3 @@ class GeometryType(ABC):
         part_starts = np.concatenate([[0], part_ends[:-1]])
 
         return part_starts, part_ends, node_starts, node_ends
-
-    @abstractmethod
-    def load(self, **kwargs):
-        pass
-
-    @abstractmethod
-    def plot(self, plotter):
-        pass

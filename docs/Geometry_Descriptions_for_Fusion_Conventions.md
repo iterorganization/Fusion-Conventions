@@ -372,8 +372,11 @@ should not contain a variable whose attribute `standard_name` has value
 **Use case:**
 
 If the geometry consists of several disconnected parts of the same
-`geometry_type`, then the _geometry_container_ must contain the attribute
-`part_node_count`.
+`geometry_type` other than [`point`](#point), then the _geometry_container_ must
+contain the attribute `part_node_count`. If the geometry consists of several
+disconnected [`points`](#point), then the _geometry_container_ should not
+contain the attribute `part_node_count`, since each 'part' would contain only a
+single node.
 
 **Requirements:**
 
@@ -385,10 +388,6 @@ should be different from the dimension of the variables mentioned in both
 Note: which parts belong together can be infered from the corresponding
 integer-values in the variables of `node_count` and `part_node_count`.
 
-Note: whenever the geometry consists of multiple disconnected points, then the
-_geometry_container_ should not have the attribute `node_count`. In this case,
-the variable mentioned in the attribute `part_node_count` must have the same
-dimension as the variables mentioned in the attribute `node_coordinates`.
 
 **Example**
 
@@ -512,18 +511,12 @@ _geometry_container_.
 
 If the _geometry_container_ has the attribute `label`, then the string-value of
 this attribute must be the name of a string-valued variable. The dimension of
-this variable depends on the geometry type and on the presence of the attribute
-`part_node_count`.
+  this variable must be the same as the dimension of the variable mentioned in
+ the attribute `node_count`.
 
-- In case of type [`point`](#point) and the attribute `part_node_count` being
-  absent, the dimension must be the same as the dimension of the variables
-  mentioned in the attribute `node_coordinates`.
-- In case of type [`point`](#point) and the attribute `part_node_count` being
-  present, the dimension must be the same as the dimension of the variables
-  mentioned in the attribute `part_node_count`.
-- For all other types, independent of the presence of `part_node_count`, the
-  dimension of this variable must be the same as the dimension of the variable
-  mentioned in attribute `node_count`.
+**Example**
+
+[TO-DO]
 
 ## More specific geometry information
 
@@ -536,9 +529,6 @@ _geometry_container_. This attribute allows applications to obtain more accurate
 geometry information without parsing all variables attached to the
 _geometry_container_, especially when the actual geometry contains
 curvature as in the case of circles and annuli.
-
-Note that only a limited collection of geometry shapes can be described using
-this attribute.
 
 **Extra requirements:**
 

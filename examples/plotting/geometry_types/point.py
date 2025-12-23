@@ -20,9 +20,9 @@ class Point(GeometryType):
         self.data = []
 
         for i in range(len(r)):
-            x_i = r[i] * np.cos(phi)
-            y_i = r[i] * np.sin(phi)
-            z_i = np.full_like(phi, z[i])
+            x_i = r[i] * np.cos(phi[i])
+            y_i = r[i] * np.sin(phi[i])
+            z_i = z[i]
 
             points = np.column_stack((x_i, y_i, z_i))
             self.data.append(pv.PolyData(points))

@@ -22,7 +22,11 @@ class Polygon(GeometryType):
 
         # NOTE: this is a bit annoying, is there a simpler way?
         node_count = self.ds[self.geom_container.node_count]
+        # TODO: add part_node_count
+
         offsets = node_count.values.cumsum()
+        # FIXME: MAST data incorrectly stores node count as floats
+        offsets = offsets.astype(int)
 
         start = 0
         self.data = []

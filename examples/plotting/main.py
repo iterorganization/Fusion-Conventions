@@ -23,4 +23,6 @@ plotter_west.show()
 # MAST
 plotter_mast = Plotter("../../data/MAST/mast_magnetics-30421_geom_container.nc")
 plotter_mast.add("b_field_tor_probe_cc_field")
+plotter_mast.add("b_field_pol_probe_cc_field_adjs")
+plotter_mast.add("b_field_tor_probe_saddle_field")
 plotter_mast.show()

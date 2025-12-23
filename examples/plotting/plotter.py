@@ -3,7 +3,6 @@ import logging
 import pyvista as pv
 import xarray as xr
 from geometry_types.point import Point
-
 from geometry_types.poloidal_point import PoloidalPoint
 from geometry_types.poloidal_polygon import PoloidalPolygon
 from geometry_types.polygon import Polygon

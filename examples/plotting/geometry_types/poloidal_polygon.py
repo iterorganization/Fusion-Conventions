@@ -16,19 +16,7 @@ class PoloidalPolygon(GeometryType):
             "node_coordinates", "_vertical_distance"
         )
 
-        node_count = self.ds[self.geom_container.node_count].values
-        part_node_count = self.ds[self.geom_container.part_node_count].values
-
-        geom_node_ends = np.cumsum(node_count)
-        part_node_ends = np.cumsum(part_node_count)
-
-        geom_part_ends = np.searchsorted(part_node_ends, geom_node_ends, side="right")
-
-        part_starts = np.concatenate([[0], geom_part_ends[:-1]])
-        part_ends = geom_part_ends
-
-        node_starts = np.concatenate([[0], part_node_ends[:-1]])
-        node_ends = part_node_ends
+        part_starts, part_ends, node_starts, node_ends = self.get_part_node_start_ends()
 
         self.data = []
 

@@ -20,24 +20,33 @@ class Polygon(GeometryType):
         x = r * np.cos(phi)
         y = r * np.sin(phi)
 
-        # NOTE: this is a bit annoying, is there a simpler way?
-        node_count = self.ds[self.geom_container.node_count]
-        # TODO: add part_node_count
+        # TODO:unify part_node_counts handling between all geometry classes
+        part_starts, part_ends, node_starts, node_ends = self.get_part_node_start_ends()
 
-        offsets = node_count.values.cumsum()
-        # FIXME: MAST data incorrectly stores node count as floats
-        offsets = offsets.astype(int)
-
-        start = 0
         self.data = []
-        for end in offsets:
-            x_loop = x[start:end]
-            y_loop = y[start:end]
-            z_loop = z[start:end]
-            start = end
-            points = np.column_stack((x_loop, y_loop, z_loop))
-            self.data.append(self.polyline_from_points(points))
+
+        for part_start, part_end in zip(part_starts, part_ends):
+            parts = []
+            for p in range(part_start, part_end):
+                n0 = node_starts[p]
+                n1 = node_ends[p]
+
+                part_x = x[n0:n1]
+                part_y = y[n0:n1]
+                part_z = z[n0:n1]
+
+                points = np.column_stack((part_x, part_y, part_z))
+                polyline = self.polyline_from_points(points)
+
+                parts.append(polyline)
+
+            self.data.append(parts)
 
     def plot(self, plotter):
-        for polyline in self.data:
-            plotter.add_mesh(polyline, line_width=3)
+        if not self.data:
+            logger.error("Geometry not loaded")
+            return
+
+        for parts in self.data:
+            for part in parts:
+                plotter.add_mesh(part, line_width=3)

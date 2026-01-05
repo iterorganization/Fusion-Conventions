@@ -52,4 +52,4 @@ class Polygon(GeometryType):
     def _plot_impl(self, plotter):
         for parts in self._data:
             for part in parts:
-                plotter.add_mesh(part)
+                plotter.add_mesh(part, show_edges=True)

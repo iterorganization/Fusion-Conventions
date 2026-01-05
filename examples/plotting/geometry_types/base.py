@@ -14,6 +14,11 @@ class GeometryType(ABC):
         self._data = None
 
     def plot(self, plotter):
+        """Plot the loaded geometry using a PyVista plotter.
+
+        Args:
+            plotter: The PyVista plotter.
+        """
         if self._data is None:
             logger.error(
                 "Cannot plot data, it must be loaded from the geometry container first"
@@ -30,7 +35,16 @@ class GeometryType(ABC):
         pass
 
     def _get_coordinate_from_standard_name(self, coordinates_name, standard_name):
-        # FIXME: This is not a nice way to deal with standard coordinates, expensive
+        """Retrieve coordinate values by its standard name.
+
+        Args:
+            coordinates_name: Attribute name listing coordinate variables.
+            standard_name: Standard name to match.
+
+        Returns:
+            Numpy array of coordinate values.
+        """
+        # FIXME: Is there an easier way to deal with standard coordinates?
         coordinate_names = self._geom_container.attrs[coordinates_name].split()
         for coordinate_name in coordinate_names:
             coordinate = self._ds[coordinate_name]
@@ -39,6 +53,14 @@ class GeometryType(ABC):
         raise KeyError(f"{standard_name} does not appear in {coordinates_name}.")
 
     def _polyline_from_points(self, points):
+        """Create a PyVista polyline from ordered points.
+
+        Args:
+            points: Array of point coordinates.
+
+        Returns:
+            PyVista PolyData representing a polyline.
+        """
         n = len(points)
         lines = np.empty(n + 1, dtype=np.int64)
         lines[0] = n
@@ -49,6 +71,11 @@ class GeometryType(ABC):
         return poly
 
     def _get_part_node_start_ends(self):
+        """Compute start and end indices for parts and nodes.
+
+        Returns:
+            Tuple of arrays: part starts, part ends, node starts, and node ends.
+        """
         node_count = self._ds[self._geom_container.node_count].values
 
         if "part_node_count" in self._geom_container.attrs:

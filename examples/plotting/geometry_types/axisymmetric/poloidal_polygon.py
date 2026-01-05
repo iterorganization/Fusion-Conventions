@@ -9,6 +9,12 @@ logger = logging.getLogger(__name__)
 
 class PoloidalPolygon(GeometryType):
     def load(self, *, max_phi=2 * np.pi, num_phi=20, **kwargs):
+        """Load poloidal polygon geometry and extrude it toroidally.
+
+        Args:
+            max_phi: Maximum toroidal angle for extrusion.
+            num_phi: Number of segments in the toroidal direction.
+        """
         r = self._get_coordinate_from_standard_name(
             "node_coordinates", "_radial_distance"
         )
@@ -54,4 +60,4 @@ class PoloidalPolygon(GeometryType):
     def _plot_impl(self, plotter):
         for parts in self._data:
             for surface in parts:
-                plotter.add_mesh(surface, opacity=1.0, show_edges=True)
+                plotter.add_mesh(surface, show_edges=True)

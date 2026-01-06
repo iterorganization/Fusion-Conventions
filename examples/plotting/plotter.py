@@ -22,7 +22,7 @@ class Plotter:
         # "line": Line, TODO: implement line geometry class
         "polygon": Polygon,
         "poloidal_point": PoloidalPoint,
-        # "poloidal_line": PoloidalLine, #TODO: implement poloidal line geometry class
+        "poloidal_line": PoloidalLine,
         "poloidal_polygon": PoloidalPolygon,
     }
 

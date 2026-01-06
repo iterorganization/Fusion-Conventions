@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import numpy as np
+
 from plotter import Plotter
 
 
@@ -19,6 +20,15 @@ def main():
     iter_pf_active = Plotter(DATA_PATH / "ITER/iter-pf-active-111001_geom_container.nc")
     iter_pf_active.add("coil.resistance", num_phi=30, max_phi=np.pi)
     iter_pf_active.show()
+
+    ## wall and divertor
+    iter_wall = Plotter(
+        DATA_PATH / "ITER/iter-first-wall-and-divertor-116000_geom_container.nc"
+    )
+    iter_wall.add("description_2d.limiter", num_phi=30, max_phi=np.pi)
+    # TODO: check vessel geometry
+    iter_wall.add("description_2d.vessel", num_phi=30, max_phi=np.pi)
+    iter_wall.show()
 
     # WEST
     plotter_west = Plotter(DATA_PATH / "WEST/west-57929_geom_container.nc")

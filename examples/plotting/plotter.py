@@ -2,7 +2,6 @@ import logging
 
 import pyvista as pv
 import xarray as xr
-
 from geometry_types.axisymmetric.poloidal_line import PoloidalLine
 from geometry_types.axisymmetric.poloidal_point import PoloidalPoint
 from geometry_types.axisymmetric.poloidal_polygon import PoloidalPolygon

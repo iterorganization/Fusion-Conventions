@@ -10,13 +10,9 @@ logger = logging.getLogger(__name__)
 
 class Point(GeometryType):
     def load(self, **kwargs):
-        r = self._get_coordinate_from_standard_name(
-            "node_coordinates", "_radial_distance"
-        )
-        phi = self._get_coordinate_from_standard_name("node_coordinates", "_azimuth")
-        z = self._get_coordinate_from_standard_name(
-            "node_coordinates", "_vertical_distance"
-        )
+        r = self._get_coordinate_from_standard_name("_radial_distance")
+        phi = self._get_coordinate_from_standard_name("_azimuth")
+        z = self._get_coordinate_from_standard_name("_vertical_distance")
         x = r * np.cos(phi)
         y = r * np.sin(phi)
 

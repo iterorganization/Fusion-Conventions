@@ -34,12 +34,14 @@ class GeometryType(ABC):
     def _plot_impl(self, plotter):
         pass
 
-    def _get_coordinate_from_standard_name(self, coordinates_name, standard_name):
+    def _get_coordinate_from_standard_name(
+        self, standard_name, coordinates_name="node_coordinates"
+    ):
         """Retrieve coordinate values by its standard name.
 
         Args:
-            coordinates_name: Attribute name listing coordinate variables.
             standard_name: Standard name to match.
+            coordinates_name: Attribute name listing coordinate variables.
 
         Returns:
             Numpy array of coordinate values.

@@ -16,12 +16,8 @@ class PoloidalPoint(GeometryType):
             max_phi: Maximum toroidal angle for extrusion.
             num_phi: Number of segments in the toroidal direction.
         """
-        r = self._get_coordinate_from_standard_name(
-            "node_coordinates", "_radial_distance"
-        )
-        z = self._get_coordinate_from_standard_name(
-            "node_coordinates", "_vertical_distance"
-        )
+        r = self._get_coordinate_from_standard_name("_radial_distance")
+        z = self._get_coordinate_from_standard_name("_vertical_distance")
 
         self._data = []
 

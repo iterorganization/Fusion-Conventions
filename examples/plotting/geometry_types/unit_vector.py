@@ -21,12 +21,6 @@ class UnitVector(GeometryType):
             "_normal_toroidal_angle", coordinates_name="node_orientations"
         )
 
-        # FIXME: Sometimes angles are not filled in the data, but they should be
-        if pol_angle is None:
-            pol_angle = np.zeros_like(r)
-        if tor_angle is None:
-            tor_angle = np.zeros_like(r)
-
         x = r * np.cos(phi)
         y = r * np.sin(phi)
 

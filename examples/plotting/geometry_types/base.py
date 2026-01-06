@@ -11,7 +11,7 @@ class GeometryType(ABC):
     def __init__(self, ds, geom_container):
         self._ds = ds
         self._geom_container = geom_container
-        self._data = None
+        self._data = []  # List of pyvista objects
 
     def plot(self, plotter):
         """Plot the loaded geometry using a PyVista plotter.
@@ -19,19 +19,21 @@ class GeometryType(ABC):
         Args:
             plotter: The PyVista plotter.
         """
-        if self._data is None:
+        if not self._data:
             logger.error(
                 "Cannot plot data, it must be loaded from the geometry container first"
             )
             return
-        self._plot_impl(plotter)
+
+        for part in self._data:
+            self._plot_impl(plotter, part)
 
     @abstractmethod
     def load(self, **kwargs):
         pass
 
     @abstractmethod
-    def _plot_impl(self, plotter):
+    def _plot_impl(self, plotter, part):
         pass
 
     def _get_coordinate_from_standard_name(

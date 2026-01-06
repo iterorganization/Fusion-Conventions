@@ -24,10 +24,7 @@ class Polygon(GeometryType):
             self._get_part_node_start_ends()
         )
 
-        self._data = []
-
         for part_start, part_end in zip(part_starts, part_ends):
-            parts = []
             for p in range(part_start, part_end):
                 n0 = node_starts[p]
                 n1 = node_ends[p]
@@ -41,11 +38,7 @@ class Polygon(GeometryType):
                 faces = np.hstack([[n], np.arange(n)])
                 poly = pv.PolyData(points, faces)
                 poly = poly.triangulate()
-                parts.append(poly)
+                self._data.append(poly)
 
-            self._data.append(parts)
-
-    def _plot_impl(self, plotter):
-        for parts in self._data:
-            for part in parts:
-                plotter.add_mesh(part, show_edges=True)
+    def _plot_impl(self, plotter, part):
+        plotter.add_mesh(part, show_edges=True)

@@ -10,6 +10,6 @@ class Line(GeometryType):
         # TODO: implement
         pass
 
-    def _plot_impl(self, plotter):
+    def _plot_impl(self, plotter, part):
         # TODO: implement
         pass

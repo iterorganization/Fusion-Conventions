@@ -19,8 +19,6 @@ class PoloidalPoint(GeometryType):
         r = self._get_coordinate_from_standard_name("_radial_distance")
         z = self._get_coordinate_from_standard_name("_vertical_distance")
 
-        self._data = []
-
         for r_i, z_i in zip(r, z, strict=True):
             polyline = pv.PolyData([[r_i, 0.0, z_i]])
             surface = polyline.extrude_rotate(
@@ -30,6 +28,5 @@ class PoloidalPoint(GeometryType):
             )
             self._data.append(surface)
 
-    def _plot_impl(self, plotter):
-        for polyline in self._data:
-            plotter.add_mesh(polyline, line_width=3)
+    def _plot_impl(self, plotter, part):
+        plotter.add_mesh(part, line_width=3)

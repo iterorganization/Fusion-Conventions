@@ -34,15 +34,14 @@ class UnitVector(GeometryType):
         unit_vec = vec / norm
 
         # Plot unit vectors as points plus direction vector
-        self._data = pv.PolyData(np.column_stack((x, y, z)))
-        self._data["vectors"] = unit_vec
+        polydata = pv.PolyData(np.column_stack((x, y, z)))
+        polydata["vectors"] = unit_vec
+        self._data.append(polydata)
 
-    def _plot_impl(self, plotter):
-        plotter.add_arrows(
-            self._data.points, self._data["vectors"], color="grey", mag=0.6
-        )
+    def _plot_impl(self, plotter, part):
+        plotter.add_arrows(part.points, part["vectors"], color="grey", mag=0.6)
         plotter.add_mesh(
-            self._data,
+            part,
             point_size=8,
             render_points_as_spheres=True,
         )

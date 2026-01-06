@@ -17,11 +17,11 @@ class Point(GeometryType):
         y = r * np.sin(phi)
 
         points = np.column_stack((x, y, z))
-        self._data = pv.PolyData(points)
+        self._data.append(pv.PolyData(points))
 
-    def _plot_impl(self, plotter):
+    def _plot_impl(self, plotter, part):
         plotter.add_mesh(
-            self._data,
+            part,
             render_points_as_spheres=True,
             point_size=6,
         )

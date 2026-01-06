@@ -2,6 +2,7 @@ import logging
 
 import pyvista as pv
 import xarray as xr
+
 from geometry_types.axisymmetric.poloidal_line import PoloidalLine
 from geometry_types.axisymmetric.poloidal_point import PoloidalPoint
 from geometry_types.axisymmetric.poloidal_polygon import PoloidalPolygon
@@ -31,15 +32,14 @@ class Plotter:
         Args:
             filename: Path to a NetCDF file
         """
-        self.ds = xr.load_dataset(
+        self._dataset = xr.load_dataset(
             filename,
             engine="netcdf4",
         )
-        self.plotter = pv.Plotter()
-        geom_containers = self._find_geom_containers()
+        self._plotter = pv.Plotter()
         logger.info(
             f"{filename} contains the following quantities with geometry containers:\n"
-            f"{geom_containers}\n"
+            f"{self._find_geom_containers()}\n"
         )
 
     def add(self, quantity_name, **kwargs):
@@ -49,25 +49,25 @@ class Plotter:
             quantity_name: Name of the data variable to plot.
             **kwargs: Arguments passed through to the geometry loader.
         """
-        quantity = self.ds[quantity_name]
+        quantity = self._dataset[quantity_name]
         if "geometry" not in quantity.attrs:
             logger.error(f"{quantity.name} does not have a geometry container.")
             return
 
-        geom_container = self.ds[quantity.geometry]
+        geom_container = self._dataset[quantity.geometry]
         geom_type = geom_container.geometry_type
         if geom_type not in self.GEOMETRY_MAP:
             logger.error(f"{geom_type!r} is not implemented for plotting.")
             return
 
         geometry_cls = self.GEOMETRY_MAP[geom_type]
-        geometry = geometry_cls(self.ds, geom_container)
+        geometry = geometry_cls(self._dataset, geom_container)
         geometry.load(**kwargs)
-        geometry.plot(self.plotter)
+        geometry.plot(self._plotter)
 
     def show(self):
         """Render the current plot."""
-        self.plotter.show()
+        self._plotter.show()
 
     def _find_geom_containers(self):
         """Find all variables that have an associated geometry container.
@@ -75,8 +75,9 @@ class Plotter:
         Returns:
             List of variable names that have an associated geometry container.
         """
+
         return [
             name
-            for name, da in self.ds.data_vars.items()
-            if hasattr(da, "geometry") and da.geometry in self.ds
+            for name, data_array in self._dataset.data_vars.items()
+            if hasattr(data_array, "geometry") and data_array.geometry in self._dataset
         ]

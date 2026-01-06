@@ -8,8 +8,8 @@ logger = logging.getLogger(__name__)
 
 
 class GeometryType(ABC):
-    def __init__(self, ds, geom_container):
-        self._ds = ds
+    def __init__(self, dataset, geom_container):
+        self._dataset = dataset
         self._geom_container = geom_container
         self._data = []  # List of pyvista objects
 
@@ -51,7 +51,7 @@ class GeometryType(ABC):
         # FIXME: Is there an easier way to deal with standard coordinates?
         coordinate_names = self._geom_container.attrs[coordinates_name].split()
         for coordinate_name in coordinate_names:
-            coordinate = self._ds[coordinate_name]
+            coordinate = self._dataset[coordinate_name]
             if coordinate.standard_name == standard_name:
                 return coordinate.values
         raise KeyError(f"{standard_name} does not appear in {coordinates_name}.")
@@ -80,10 +80,10 @@ class GeometryType(ABC):
         Returns:
             Tuple of arrays: part starts, part ends, node starts, and node ends.
         """
-        node_count = self._ds[self._geom_container.node_count].values
+        node_count = self._dataset[self._geom_container.node_count].values
 
         if "part_node_count" in self._geom_container.attrs:
-            part_node_count = self._ds[self._geom_container.part_node_count].values
+            part_node_count = self._dataset[self._geom_container.part_node_count].values
         else:
             part_node_count = node_count
 

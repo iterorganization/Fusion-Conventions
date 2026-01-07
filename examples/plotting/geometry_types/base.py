@@ -76,9 +76,7 @@ class GeometryType(ABC):
         lines[0] = n
         lines[1:] = np.arange(n)
 
-        poly = pv.PolyData(points)
-        poly.lines = lines
-        return poly
+        return pv.PolyData(points, lines=lines)
 
     def _get_part_node_start_ends(self):
         """Compute start and end indices for parts and nodes.

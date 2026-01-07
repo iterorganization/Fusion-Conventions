@@ -5,7 +5,7 @@ array. For convience, this variable will be referred to as _data_variable_.
 
 The _data_variable_ must have an attribute `geometry`. The string-value of this
 attribute must be equal to the name of a 0-dimensional variable in the data
-structure, which we will refer to as the _geometry_container_. Note that
+structure, which will be refered to as the _geometry_container_. Note that
 multiple data variables may refer to the same _geometry_container_.
 
 The _geometry_container_ must have at least the following two attributes
@@ -14,7 +14,7 @@ The _geometry_container_ must have at least the following two attributes
 - `geometry_type`.
 
 The string-value of the attribute `node_coordinates` contains the names of the
-variables in the data structure that hold the actual geometric data, all
+1D variables in the data structure that hold the actual geometric data, all
 separated by a single space. Each of
 these variables must hold an attribute `standard_name`, indicating which
 spatial coordinate this variable represents. The value of this attribute
@@ -45,9 +45,8 @@ point-measurements of scalar quantities, such as temperature.
 
 The _geometry_container_ does not need any extra attributes for this geometry type.
 
-Each of the dimensions of the variables mentioned in the attribute
-`node_coordinates` of the _geometry_container_ must also be a dimension of
-_data_variable_.
+The dimension of the variables mentioned in the attribute `node_coordinates` of
+the _geometry_container_ must also be a dimension of _data_variable_.
 
 **Example**
 
@@ -87,13 +86,13 @@ In this case, the geometry_container must also have an attribute
 The point in space from which this unit vector starts, is described by the 3
 variables in `node_coordinates`.
 
-The direction of the unit vector is described by the two variables whose names
-are mentioned in `node_orientations`, seperated by a single space. These
-variables represent the _normal_poloidal_angle and _normal_toroidal_angle, and
-must have an attribute `standard_name` with value "_normal_poloidal_angle" and
-"_normal_toroidal_angle", respectively.
+The direction of the unit vector is described by the two 1D variables whose
+names must be mentioned in `node_orientations`, seperated by a single space.
+These variables represent the _normal_poloidal_angle and _normal_toroidal_angle,
+and must have an attribute `standard_name` with value "_normal_poloidal_angle"
+and "_normal_toroidal_angle", respectively.
 
-Each of the dimensions of the variables mentioned in the attributes
+The dimension of the variables mentioned in the attributes
 `node_coordinates` and `node_orientations` of the _geometry_container_ must also
 be a dimension of _data_variable_.
 
@@ -141,7 +140,7 @@ container must have the same dimension, which will be refered to as their _node_
 dimension. These 1D variables describe the space coordinates of each 'node'.
 
 The string-value of the attribute `node_count` must be the name of an
-integer-valued variable in the data structure, where each of its dimensions must
+integer-valued variable in the data structure, where its dimension must
 also be a dimension of the corresponding variable _data_variable_.
 
 Furthermore, this variable must return the number of nodes required to describe
@@ -279,9 +278,8 @@ _radial_distance and _vertical_distance.
 
 The _geometry_container_ does not need any additional attributes.
 
-Each of the dimensions of the variables mentioned in the attribute
-`node_coordinates` of the _geometry_container_ must also be a dimension of
-_data_variable_.
+The dimension of the variables mentioned in the attribute `node_coordinates` of
+the _geometry_container_ must also be a dimension of _data_variable_.
 
 **Example**
 
@@ -315,7 +313,7 @@ _data_variable_.
 **Use case:**
 
 This geometry type describes an axisymmetric surface. Since each cross-section
-in the plane "_radial_distance and _vertical_distance" is the same for this
+in the plane "__radial_distance_ and __vertical_distance_" is the same for this
 geometry, it is sufficient to describe it by a collection of connected
 line-segments in this plane.
 
@@ -355,7 +353,7 @@ not contain a variable whose attribute `standard_name` has value '_azimuth'.
 **Use case:**
 
 This geometry type describes an axisymmetric volume. Since each cross-section in
-the plane "_radial_distance and _vertical_distance" is the same for this
+the plane "__radial_distance_ and __vertical_distance_" is the same for this
 geometry, it is sufficient to describe it by a polygon in this plane.
 
 **Extra requirements:**
@@ -391,14 +389,10 @@ should be different from the dimension of the variables mentioned in both
         part = 5;
 
     variables:
-        string name(device);
-            name:description = "Device name of axisymmetric conductor loop";
-
-        double area(part);
-            area:units = "m^2";
-            area:standard_name = "_cross_sectional_area_of_element";
+        double field(device);
+            field:geometry = "geometry_container";
         
-        int geometry_container ;
+        int geometry_container;
             geometry_container:geometry_type = "poloidal_point";
             geometry_container:node_count = "node_count" ;
             geometry_container:node_coordinates = "r z" ;
@@ -418,11 +412,11 @@ should be different from the dimension of the variables mentioned in both
             z:units = "m";
             z:standard_name = "_vertical_distance";
 
-## Holes in the geometry
+## Holes in the geometry poloidal_polygon
 
 **Use case:**
 
-In case the geometry of types 'polygon' or 'poloidal_polygon' consist of holes,
+In case the geometry of type [`poloidal_polygon`](#poloidal_polygon) consist of holes,
 then the _geometry_container_ must contain the attributes `part_node_count` and
 `interior`.
 
@@ -431,12 +425,11 @@ then the _geometry_container_ must contain the attributes `part_node_count` and
 The attribute `part_node_count` contains the name of the integer-valued variable
 that represents the number of nodes per part, and the attribute `interior`
 contains the name of the integer-valued variable that indicates which part is
-condisidered as the interior of the geometry (value 0) and which part is considered
+considered as the interior of the geometry (value 0) and which part is considered
 exterior (value 1). These variables must have the same dimension.
 
 Each part of the geometry denoting the exterior of the geometry must be
-completely contained by and in the same plane as another part representing the
-interior.
+completely contained by another part representing the interior.
 
 **Example**
 
@@ -446,15 +439,10 @@ interior.
         part = 5;
 
     variables:
-
-        string name(device);
-            name:description = "Device name of axisymmetric conductor loop";
-
-        double area(part);
-            area:units = "m^2";
-            area:standard_name = "_cross_sectional_area_of_element";
+        double field(device);
+            field:geometry = "geometry_container";
         
-        int geometry_container ;
+        int geometry_container;
             geometry_container:geometry_type = "poloidal_polygon";
             geometry_container:node_count = "node_count" ;
             geometry_container:node_coordinates = "r z" ;
@@ -478,8 +466,7 @@ interior.
 
 
     data:
-        name = "55.A3.00-MLF-3001" , "55.A3.00-MLF-3002", "55.A3.00-MLF-3003";
-        area = 9.8, 6.7, 8.3, 3.3, 7.0;
+        field = 9.8, 6.7, 3.6;
         node_count = 7, 4, 6;
         part_node_count = 3, 4, 4, 3, 3;
         interior = 0, 0, 0, 0, 1; // Triangle & rectangle, rectangle, and 
@@ -536,10 +523,8 @@ this attribute must be the name of a string-valued variable. The dimension of
         device_id = "55.AD.00-MSA-1001", "55.AD.00-MSA-1002", "55.AD.00-MSA-1003";
         flux = 10.4, 10.6, 9.9,
             10.2, 10.4, 9.7;
-        r = 3.4, 1.0, 5.8,
-            3.4, 1.0, 5.8;
-        z = 0.4, 7.7, 8.1,
-            0.4, 7.7, 8.1;
+        r =  3.4, 1.0, 5.8;
+        z =  0.4, 7.7, 8.1;
 
 ## More specific geometry information
 
@@ -556,11 +541,12 @@ in the case of circles and annuli.
 
 If the _geometry_container_ has the attribute `geometric_shape`, then the
 string-value of this attribute must be the name of a 2D float-valued variable of
-shape $N \times k$, where $N$ is number of nodes. The first entry of each
+shape $N \times k$, where $N$ is the number of nodes. The first entry of each
 length-$k$ array represents an integer identifier determining the meaning of the
 other entries. This identifier will be refered to as the _shape_identifier_. The
-dimension of the first axis of this variable must be the same as the dimension
-of the variable mentioned in attribute `node_count`.
+dimension of the first axis of this variable must also be a dimension of
+_data_variable_ and, if the attribute `node_count` is present, must be the same
+as the dimension of the variable mentioned in the attribute `node_count`.
 
 The variable mentioned in the attribute `geometric_shape` may contain 'NaN'
 values, such that not every value of _shape_identifier_ should require the use

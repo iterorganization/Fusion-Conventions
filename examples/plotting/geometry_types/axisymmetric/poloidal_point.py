@@ -3,7 +3,8 @@ import logging
 import numpy as np
 import pyvista as pv
 
-from ..base import GeometryType
+from geometry_types.base import GeometryType
+from standard_names import RADIAL, VERTICAL
 
 logger = logging.getLogger(__name__)
 
@@ -16,8 +17,9 @@ class PoloidalPoint(GeometryType):
             max_phi: Maximum toroidal angle for extrusion.
             num_phi: Number of segments in the toroidal direction.
         """
-        r = self._get_coordinate_from_standard_name("_radial_distance")
-        z = self._get_coordinate_from_standard_name("_vertical_distance")
+
+        r = self._get_coordinate_from_standard_name(RADIAL)
+        z = self._get_coordinate_from_standard_name(VERTICAL)
 
         for r_i, z_i in zip(r, z, strict=True):
             polyline = pv.PolyData([[r_i, 0.0, z_i]])

@@ -3,22 +3,23 @@ import logging
 import numpy as np
 import pyvista as pv
 
-from .base import GeometryType
+from geometry_types.base import GeometryType
+from standard_names import AZIMUTH, POL_ANGLE, RADIAL, TOR_ANGLE, VERTICAL
 
 logger = logging.getLogger(__name__)
 
 
 class UnitVector(GeometryType):
     def load(self, **kwargs):
-        r = self._get_coordinate_from_standard_name("_radial_distance")
-        phi = self._get_coordinate_from_standard_name("_azimuth")
-        z = self._get_coordinate_from_standard_name("_vertical_distance")
+        r = self._get_coordinate_from_standard_name(RADIAL)
+        phi = self._get_coordinate_from_standard_name(AZIMUTH)
+        z = self._get_coordinate_from_standard_name(VERTICAL)
 
         pol_angle = self._get_coordinate_from_standard_name(
-            "_normal_poloidal_angle", coordinates_name="node_orientations"
+            POL_ANGLE, coordinates_name="node_orientations"
         )
         tor_angle = self._get_coordinate_from_standard_name(
-            "_normal_toroidal_angle", coordinates_name="node_orientations"
+            TOR_ANGLE, coordinates_name="node_orientations"
         )
 
         x = r * np.cos(phi)

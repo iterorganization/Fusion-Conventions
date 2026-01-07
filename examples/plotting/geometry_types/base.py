@@ -4,6 +4,8 @@ from abc import ABC, abstractmethod
 import numpy as np
 import pyvista as pv
 
+from standard_names import ALL_STANDARD_NAMES
+
 logger = logging.getLogger(__name__)
 
 
@@ -48,6 +50,10 @@ class GeometryType(ABC):
         Returns:
             Numpy array of coordinate values.
         """
+
+        if standard_name not in ALL_STANDARD_NAMES:
+            raise ValueError(f"Unknown standard name: {standard_name}")
+
         # FIXME: Is there an easier way to deal with standard coordinates?
         coordinate_names = self._geom_container.attrs[coordinates_name].split()
         for coordinate_name in coordinate_names:

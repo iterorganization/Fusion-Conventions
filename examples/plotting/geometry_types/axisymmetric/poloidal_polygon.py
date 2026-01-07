@@ -2,7 +2,8 @@ import logging
 
 import numpy as np
 
-from ..base import GeometryType
+from geometry_types.base import GeometryType
+from standard_names import RADIAL, VERTICAL
 
 logger = logging.getLogger(__name__)
 
@@ -15,8 +16,8 @@ class PoloidalPolygon(GeometryType):
             max_phi: Maximum toroidal angle for extrusion.
             num_phi: Number of segments in the toroidal direction.
         """
-        r = self._get_coordinate_from_standard_name("_radial_distance")
-        z = self._get_coordinate_from_standard_name("_vertical_distance")
+        r = self._get_coordinate_from_standard_name(RADIAL)
+        z = self._get_coordinate_from_standard_name(VERTICAL)
 
         # TODO: implement exterior/interior nodes
         part_starts, part_ends, node_starts, node_ends = (

@@ -2,7 +2,7 @@ import logging
 
 import numpy as np
 
-from ..base import GeometryType
+from geometry_types.base import GeometryType
 
 logger = logging.getLogger(__name__)
 

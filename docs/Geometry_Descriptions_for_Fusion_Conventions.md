@@ -21,7 +21,7 @@ spatial coordinate this variable represents. The value of this attribute
 must differ for each of these variables.
 
 The attribute `geometry_type` indicates how to interpret the geometric data.
-Based on the value of this attribute the _geometry_container_ should have other
+Based on the value of this attribute the _geometry_container_ must have other
 attributes as well. Valid values for this attribute are any of the following:
 
 - [`point`](#point)
@@ -322,7 +322,7 @@ line-segments in this plane.
 **Extra requirements:**
 
 The required attributes of this type are exactly the same as with the geometric
-type 'line'. The only difference is that the attribute `node_coordinates` should
+type 'line'. The only difference is that the attribute `node_coordinates` must
 not contain a variable whose attribute `standard_name` has value '_azimuth'.
 
 Note: if the first point coincides with the last point then the resulting geometry is not equivalent with the type [poloidal_polygon](#poloidal_polygon), as this would result in a infinitly thin tube-like geometry whereas the type [poloidal_polygon](#poloidal_polygon) is used to describe volumes.
@@ -364,7 +364,7 @@ geometry, it is sufficient to describe it by a polygon in this plane.
 
 The required attributes of this type are exactly the same as with the geometric
 type 'polygon'. The only difference is that the attribute `node_coordinates`
-should not contain a variable whose attribute `standard_name` has value
+must not contain a variable whose attribute `standard_name` has value
 '_azimuth'.
 
 ## Geometries containing Multiple parts

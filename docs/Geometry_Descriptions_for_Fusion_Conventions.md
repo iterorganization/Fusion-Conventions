@@ -505,12 +505,41 @@ _geometry_container_.
 
 If the _geometry_container_ has the attribute `label`, then the string-value of
 this attribute must be the name of a string-valued variable. The dimension of
-  this variable must be the same as the dimension of the variable mentioned in
- the attribute `node_count`.
+  this variable must also be a dimension of _data_variable_ and, if the
+  attribute `node_count` is present, must be the same as the dimension of the
+ variable mentioned in the attribute `node_count`.
 
 **Example**
 
-[TO-DO]
+    dimensions:
+        flux_loop = 3;
+        time = 2;
+
+    variables:
+        string device_id(flux_loop);
+            device_id:description = "Device identifier of flux loop";
+
+        double flux(time, flux_loop);
+            flux:geometry = "some_geometry_container";
+        
+        int some_geometry_container;
+            some_geometry_container:geometry_type = "poloidal_point";
+            some_geometry_container:node_coordinates = "r z" ;
+            some_geometry_container:label = "device_id";
+
+        double r(flux_loop);
+            r:standard_name = "_radial_distance";
+        
+        double z(flux_loop);
+            z:standard_name = "_vertical_distance";
+    data:
+        device_id = "55.AD.00-MSA-1001", "55.AD.00-MSA-1002", "55.AD.00-MSA-1003";
+        flux = 10.4, 10.6, 9.9,
+            10.2, 10.4, 9.7;
+        r = 3.4, 1.0, 5.8,
+            3.4, 1.0, 5.8;
+        z = 0.4, 7.7, 8.1,
+            0.4, 7.7, 8.1;
 
 ## More specific geometry information
 

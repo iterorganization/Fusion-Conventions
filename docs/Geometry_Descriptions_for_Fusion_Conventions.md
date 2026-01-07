@@ -325,8 +325,6 @@ The required attributes of this type are exactly the same as with the geometric
 type 'line'. The only difference is that the attribute `node_coordinates` must
 not contain a variable whose attribute `standard_name` has value '_azimuth'.
 
-Note: if the first point coincides with the last point then the resulting geometry is not equivalent with the type [poloidal_polygon](#poloidal_polygon), as this would result in a infinitly thin tube-like geometry whereas the type [poloidal_polygon](#poloidal_polygon) is used to describe volumes.
-
 **Example**
 
     dimensions:
@@ -384,10 +382,6 @@ The attribute `part_node_count` contains the name of the integer-valued variable
 that represents the number of nodes per part. The dimension of this variable
 should be different from the dimension of the variables mentioned in both
 `node_coordinates` and, if present, `node_count`.
-
-Note: which parts belong together can be infered from the corresponding
-integer-values in the variables of `node_count` and `part_node_count`.
-
 
 **Example**
 
@@ -524,7 +518,7 @@ this attribute must be the name of a string-valued variable. The dimension of
 
 If one wants to add more specific geometry information to a geometry of type
 [`poloidal_line`](#poloidal_line) or [`poloidal_polygon`](#poloidal_polygon),
-then this is possible by including the attribute `specific_shape` in the
+then this is possible by including the attribute `geometric_shape` in the
 _geometry_container_. This attribute allows applications to obtain more accurate
 geometry information without parsing all variables attached to the
 _geometry_container_, especially when the actual geometry contains
@@ -532,40 +526,27 @@ curvature as in the case of circles and annuli.
 
 **Extra requirements:**
 
-If the _geometry_container_ has the attribute `specific_shape`, then the
-string-value of this attribute must be the name of a 2D float-valued variable.
-The size of the second axis of this variable must be equal to 5, where the
-first entry of each length-5 array represents an integer identifier determining
-the meaning of the other four entries. This identifier will be refered to as the
-_shape_identifier_. The dimension of this variable must be the same as the
-dimension of the variable mentioned in attribute `node_count`.
+If the _geometry_container_ has the attribute `geometric_shape`, then the
+string-value of this attribute must be the name of a 2D float-valued variable of
+shape $N \times k$, where $N$ is number of nodes. The size of the second axis of
+this variable must be equal to $k$, where the first entry of each length-$k$
+array represents an integer identifier determining the meaning of the other
+entries. This identifier will be refered to as the _shape_identifier_. The
+dimension of the first axis of this variable must be the same as the dimension
+of the variable mentioned in attribute `node_count`.
 
-The variable mentioned in the attribute `specific_shape` may contain 'NaN'
+The variable mentioned in the attribute `geometric_shape` may contain 'NaN'
 values, such that not every value of _shape_identifier_ should require the use
-of all four other entries and not every geometry needs to be associated with a
-specific geometry shape.
+of the remaining $k-1$ entries and not every geometry needs to be associated
+with a specific geometry shape.
 
-Valid values for _shape_identifier_ are the
-following
+Consider a length-$k$ array of the variable mentioned in the attribute
+`geometric_shape`: _[_shape_identifier_, $x_1$,..., $x_k$ ]_. The table below
+shows what the values of $x_i$ represent based on the value of
+_shape_identifier_
 
-- 1, represents a rectangle,
-- 2, represents an annulus.
-
-
-Consider a length-5 array of the variable mentioned in the attribute
-`specific_shape`: _[_shape_identifier_, x_1, x_2, x_3, x_4]_. The values of
-_x_i_ represent the following based on the value of _shape_identifier_
-
-**_shape_identifier_ = 1**
-
-- x_1: _radial_distance of the centre
-- x_2: _vertical_distance of the centre
-- x_3: width of rectangle with respect to the coordinate _radial_distance
-- x_4: height of rectangle with respect to the coordinate _vertical_distance
-
-**_shape_identifier_ = 2**
-
-- x_1: _radial_distance of the centre
-- x_2: _vertical_distance of the centre
-- x_3: inner radius
-- x_4: outer radius
+| Shape              | _shape_identifier_ | $x_1$                             | $x_2$                               | $x_3$        | $x_4$        |
+|--------------------|--------------------|-----------------------------------|-------------------------------------|--------------|--------------|
+| Poloidal circle    | 1                  | _radial_distance<br>of the centre | _vertical_distance<br>of the centre | Radius       | -            |
+| Poloidal annulus   | 2                  | _radial_distance<br>of the centre | _vertical_distance<br>of the centre | Inner radius | Outer radius |
+| Poloidal rectangle | 3                  | _radial_distance<br>of the centre | _vertical_distance<br>of the centre | With         | Height       |

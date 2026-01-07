@@ -518,20 +518,18 @@ this attribute must be the name of a string-valued variable. The dimension of
 
 If one wants to add more specific geometry information to a geometry of type
 [`poloidal_line`](#poloidal_line) or [`poloidal_polygon`](#poloidal_polygon),
-then this is possible by including the attribute `geometric_shape` in the
+then the attribute `geometric_shape` needs to be attached to the
 _geometry_container_. This attribute allows applications to obtain more accurate
-geometry information without parsing all variables attached to the
-_geometry_container_, especially when the actual geometry contains
-curvature as in the case of circles and annuli.
+geometry information, especially when the actual geometry contains curvature as
+in the case of circles and annuli.
 
 **Extra requirements:**
 
 If the _geometry_container_ has the attribute `geometric_shape`, then the
 string-value of this attribute must be the name of a 2D float-valued variable of
-shape $N \times k$, where $N$ is number of nodes. The size of the second axis of
-this variable must be equal to $k$, where the first entry of each length-$k$
-array represents an integer identifier determining the meaning of the other
-entries. This identifier will be refered to as the _shape_identifier_. The
+shape $N \times k$, where $N$ is number of nodes. The first entry of each
+length-$k$ array represents an integer identifier determining the meaning of the
+other entries. This identifier will be refered to as the _shape_identifier_. The
 dimension of the first axis of this variable must be the same as the dimension
 of the variable mentioned in attribute `node_count`.
 
@@ -541,7 +539,7 @@ of the remaining $k-1$ entries and not every geometry needs to be associated
 with a specific geometry shape.
 
 Consider a length-$k$ array of the variable mentioned in the attribute
-`geometric_shape`: _[_shape_identifier_, $x_1$,..., $x_k$ ]_. The table below
+`geometric_shape`: _[_shape_identifier_, $x_1$,..., $x_{k-1}$ ]_. The table below
 shows what the values of $x_i$ represent based on the value of
 _shape_identifier_
 
@@ -549,4 +547,4 @@ _shape_identifier_
 |--------------------|--------------------|-----------------------------------|-------------------------------------|--------------|--------------|
 | Poloidal circle    | 1                  | _radial_distance<br>of the centre | _vertical_distance<br>of the centre | Radius       | -            |
 | Poloidal annulus   | 2                  | _radial_distance<br>of the centre | _vertical_distance<br>of the centre | Inner radius | Outer radius |
-| Poloidal rectangle | 3                  | _radial_distance<br>of the centre | _vertical_distance<br>of the centre | With         | Height       |
+| Poloidal rectangle | 3                  | _radial_distance<br>of the centre | _vertical_distance<br>of the centre | Width         | Height       |

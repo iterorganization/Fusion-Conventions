@@ -19,7 +19,7 @@ class Plotter:
     GEOMETRY_MAP = {
         "unit_vector": UnitVector,
         "point": Point,
-        # "line": Line, TODO: implement line geometry class
+        "line": Line,
         "polygon": Polygon,
         "poloidal_point": PoloidalPoint,
         # "poloidal_line": PoloidalLine, #TODO: implement poloidal line geometry class

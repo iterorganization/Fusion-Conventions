@@ -498,8 +498,33 @@ this attribute must be the name of a string-valued variable. The dimension of
 
 **Example**
 
-[TO-DO]
+    dimensions:
+        flux_loop = 3;
+        time = 2;
 
+    variables:
+        string device_id(flux_loop);
+            device_id:description = "Device identifier of flux loop";
+
+        double flux(time, flux_loop);
+            flux:geometry = "some_geometry_container";
+        
+        int some_geometry_container;
+            some_geometry_container:geometry_type = "poloidal_point";
+            some_geometry_container:node_coordinates = "r z" ;
+            some_geometry_container:label = "device_id";
+
+        double r(flux_loop);
+            r:standard_name = "_radial_distance";
+        
+        double z(flux_loop);
+            z:standard_name = "_vertical_distance";
+    data:
+        device_id = "55.AD.00-MSA-1001", "55.AD.00-MSA-1002", "55.AD.00-MSA-1003";
+        flux = 10.4, 10.6, 9.9,
+            10.2, 10.4, 9.7;
+        r =  3.4, 1.0, 5.8;
+        z =  0.4, 7.7, 8.1;
 
 ## More specific geometry information
 
@@ -541,4 +566,54 @@ _shape_identifier_
 
 **Example**
 
-[TO-DO]
+    dimensions:
+        time = 2;
+        coil_element = 3;
+        coil_node = 27;
+        coil_part = 4;
+        coil_shape_size = 5;
+
+    variables:
+        double coil.resistance(time, coil_element);
+            coil.resistance:standard_name = "";
+            coil.resistance:units = "Ohm";
+            coil.resistance:geometry = "coil_geometry_container";
+        
+        int coil_geometry_container;
+            coil_geometry_container:geometry_type = "poloidal_polygon";
+            coil_geometry_container:node_coordinates = "coil_element_r coil_element_z";
+            coil_geometry_container:node_count = "coil_element_node_count";
+            coil_geometry_container:part_node_count = "coil_element_part_node_count";
+            coil_geometry_container:interior_name = "coil_element_interior";
+            coil_geometry_container:geometric_shape = "coil_element_shapes";
+
+        int coil_element_node_count(coil_element);
+
+        int coil_element_part_node_count(coil_part);
+
+        int coil_element_interior(coil_part);
+
+        double coil_element_r(coil_node);
+            coil_element_r:standard_name = "_radial_distance";
+        
+        double coil_element_z(coil_node);
+            coil_element_z:standard_name = "_vertical_distance";
+
+        double coil_element_shapes(coil_element, coil_shape_size);
+
+    data:
+        coil.resistance = 0.0057, 0.00791, 0.0061,
+            0.088, 0.034, 0.077;
+        coil_element_node_count = 20, 4, 3; // An annulus (each circle described
+        // by 10 points), a rectangle and a triangle
+        coil_element_part_node_count = 10, 10, 4, 3;
+        coil_element_interior = 0, 1, 0, 0;
+        coil_element_r = 1.76 , 1.634, 1.304, 0.896, 0.566, 0.44 , 0.566, 0.896, 1.304,
+            1.634,  1.22 , 1.197, 1.137, 1.063, 1.003, 0.98 , 1.003, 1.063, 1.137,
+            1.197, 2.1, 2.1, 2.6, 2.6, 0.33, 1.1, 0.33;
+        coil_element_z = 0.3  ,  0.688,  0.928,  0.928,  0.688,  0.3  , -0.088, -0.328,
+            -0.328, -0.088, 0.3  , 0.371, 0.414, 0.414, 0.371, 0.3  , 0.229, 0.186, 0.186,
+            0.229, 1.5, 1.8, 1.8, 1.5, 2.2, 2.5, 2.8;
+        coil_element_shapes = 2, 1.1, 0.3, 0.66, 0.12,
+            3, 2.35, 1.65, 0.5, 0.3,
+            0, 0, 0, 0, 0// no shape identifier for rectangle

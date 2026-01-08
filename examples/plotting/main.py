@@ -26,7 +26,6 @@ def main():
         DATA_PATH / "ITER/iter-first-wall-and-divertor-116000_geom_container.nc"
     )
     iter_wall.add("description_2d.limiter", num_phi=30, max_phi=np.pi)
-    # TODO: check vessel geometry
     iter_wall.add("description_2d.vessel", num_phi=30, max_phi=np.pi)
     iter_wall.show()
 

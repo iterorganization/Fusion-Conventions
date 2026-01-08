@@ -78,11 +78,12 @@ class GeometryType(ABC):
 
         return pv.PolyData(points, lines=lines)
 
-    def _get_part_node_start_ends(self):
-        """Compute start and end indices for parts and nodes.
+    def _loop_over_parts(self):
+        """Generate slices corresponding to node ranges for each part in the geometry
+        container.
 
-        Returns:
-            Tuple of arrays: part starts, part ends, node starts, and node ends.
+        Yields:
+            A slice containing the start and end indices of nodes for a single part.
         """
         node_count = self._dataset[self._geom_container.node_count].values
 
@@ -91,14 +92,8 @@ class GeometryType(ABC):
         else:
             part_node_count = node_count
 
-        part_node_ends = np.cumsum(part_node_count)
-        node_ends = part_node_ends
-        node_starts = np.concatenate([[0], node_ends[:-1]])
-
-        geom_node_ends = np.cumsum(node_count)
-        geom_part_ends = np.searchsorted(part_node_ends, geom_node_ends, side="right")
-
-        part_ends = geom_part_ends
-        part_starts = np.concatenate([[0], part_ends[:-1]])
-
-        return part_starts, part_ends, node_starts, node_ends
+        node_idx = 0
+        for count in part_node_count:
+            next_node_idx = node_idx + count
+            yield slice(node_idx, next_node_idx)
+            node_idx = next_node_idx

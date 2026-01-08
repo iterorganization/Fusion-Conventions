@@ -20,33 +20,25 @@ class PoloidalPolygon(GeometryType):
         z = self._get_coordinate_from_standard_name(VERTICAL)
 
         # TODO: implement exterior/interior nodes
-        part_starts, part_ends, node_starts, node_ends = (
-            self._get_part_node_start_ends()
-        )
+        for node_range in self._loop_over_parts():
+            ring_r = r[node_range]
+            ring_z = z[node_range]
 
-        for part_start, part_end in zip(part_starts, part_ends):
-            for p in range(part_start, part_end):
-                n0 = node_starts[p]
-                n1 = node_ends[p]
+            # Ensure rings are closed
+            ring_r = np.append(ring_r, ring_r[0])
+            ring_z = np.append(ring_z, ring_z[0])
 
-                ring_r = r[n0:n1]
-                ring_z = z[n0:n1]
+            points = np.column_stack([ring_r, np.zeros_like(ring_r), ring_z])
 
-                # Ensure rings are closed
-                ring_r = np.append(ring_r, ring_r[0])
-                ring_z = np.append(ring_z, ring_z[0])
+            polyline = self._polyline_from_points(points)
 
-                points = np.column_stack([ring_r, np.zeros_like(ring_r), ring_z])
+            surface = polyline.extrude_rotate(
+                angle=np.degrees(max_phi),
+                resolution=num_phi,
+                capping=False,
+            )
 
-                polyline = self._polyline_from_points(points)
-
-                surface = polyline.extrude_rotate(
-                    angle=np.degrees(max_phi),
-                    resolution=num_phi,
-                    capping=False,
-                )
-
-                self._data.append(surface)
+            self._data.append(surface)
 
     def _plot_impl(self, plotter, part):
         plotter.add_mesh(part, show_edges=True)

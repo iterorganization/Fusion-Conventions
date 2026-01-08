@@ -20,26 +20,18 @@ class Polygon(GeometryType):
         x = r * np.cos(phi)
         y = r * np.sin(phi)
 
-        # TODO: unify part_node_counts handling between all geometry classes
-        part_starts, part_ends, node_starts, node_ends = (
-            self._get_part_node_start_ends()
-        )
+        for node_range in self._loop_over_parts():
+            points = np.column_stack((x[node_range], y[node_range], z[node_range]))
 
-        for part_start, part_end in zip(part_starts, part_ends):
-            for p in range(part_start, part_end):
-                n0 = node_starts[p]
-                n1 = node_ends[p]
-                points = np.column_stack((x[n0:n1], y[n0:n1], z[n0:n1]))
+            # Ensure polygon is closed
+            if not np.allclose(points[0], points[-1]):
+                points = np.vstack([points, points[0]])
 
-                # Ensure polygon is closed
-                if not np.allclose(points[0], points[-1]):
-                    points = np.vstack([points, points[0]])
-
-                n = len(points)
-                faces = np.hstack([[n], np.arange(n)])
-                poly = pv.PolyData(points, faces)
-                poly = poly.triangulate()
-                self._data.append(poly)
+            n = len(points)
+            faces = np.hstack([[n], np.arange(n)])
+            poly = pv.PolyData(points, faces)
+            poly = poly.triangulate()
+            self._data.append(poly)
 
     def _plot_impl(self, plotter, part):
         plotter.add_mesh(part, show_edges=True)

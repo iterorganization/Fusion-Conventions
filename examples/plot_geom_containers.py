@@ -258,7 +258,7 @@ def add_quantity_to_plot(plotter, dataset, quantity_name):
     plotter_function(plotter, dataset, geom_container)
 
 
-def plot(filename, quantities):
+def plot(filename, *quantities):
     """Plot quantities from a NetCDF dataset.
 
     Args:
@@ -286,43 +286,38 @@ def main():
     # ITER Magnetics
     plot(
         DATA_PATH / "ITER/iter-md-magnetics_geom_container.nc",
-        [
-            "b_field_pol_probe.field.data",
-            "b_field_phi_probe.field.data",
-            "flux_loop.flux",
-        ],
+        "b_field_pol_probe.field.data",
+        "b_field_phi_probe.field.data",
+        "flux_loop.flux",
     )
 
     # ITER PF Active
     plot(
         DATA_PATH / "ITER/iter-pf-active-111001_geom_container.nc",
-        ["coil.resistance"],
+        "coil.resistance",
     )
 
     # ITER Wall and Divertor
     plot(
         DATA_PATH / "ITER/iter-first-wall-and-divertor-116000_geom_container.nc",
-        ["description_2d.limiter", "description_2d.vessel"],
+        "description_2d.limiter",
+        "description_2d.vessel",
     )
 
     # WEST
     plot(
         DATA_PATH / "WEST/west-57929_geom_container.nc",
-        [
-            "b_field_pol_probe.field.data",
-            "b_field_tor_probe.field.data",
-            "flux_loop.flux",
-        ],
+        "b_field_pol_probe.field.data",
+        "b_field_tor_probe.field.data",
+        "flux_loop.flux",
     )
 
     # MAST
     plot(
         DATA_PATH / "MAST/mast_magnetics-30421_geom_container.nc",
-        [
-            "b_field_tor_probe_cc_field",
-            "b_field_pol_probe_cc_field_adjs",
-            "b_field_tor_probe_saddle_field",
-        ],
+        "b_field_tor_probe_cc_field",
+        "b_field_pol_probe_cc_field_adjs",
+        "b_field_tor_probe_saddle_field",
     )
 
 

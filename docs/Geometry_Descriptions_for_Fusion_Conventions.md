@@ -575,7 +575,7 @@ _shape_identifier_
 
     variables:
         double coil.resistance(time, coil_element);
-            coil.resistance:standard_name = "";
+            coil.resistance:standard_name = "_coil_resistance";
             coil.resistance:units = "Ohm";
             coil.resistance:geometry = "coil_geometry_container";
         
@@ -584,7 +584,7 @@ _shape_identifier_
             coil_geometry_container:node_coordinates = "coil_element_r coil_element_z";
             coil_geometry_container:node_count = "coil_element_node_count";
             coil_geometry_container:part_node_count = "coil_element_part_node_count";
-            coil_geometry_container:interior_name = "coil_element_interior";
+            coil_geometry_container:interior = "coil_element_interior";
             coil_geometry_container:geometric_shape = "coil_element_shapes";
 
         int coil_element_node_count(coil_element);
@@ -614,6 +614,6 @@ _shape_identifier_
         coil_element_z = 0.3  ,  0.688,  0.928,  0.928,  0.688,  0.3  , -0.088, -0.328,
             -0.328, -0.088, 0.3  , 0.371, 0.414, 0.414, 0.371, 0.3  , 0.229, 0.186, 0.186,
             0.229, 1.5, 1.8, 1.8, 1.5, 2.2, 2.5, 2.8;
-        coil_element_shapes = 2, 1.1, 0.3, 0.66, 0.12,
-            3, 2.35, 1.65, 0.5, 0.3,
-            0, 0, 0, 0, 0// no shape identifier for rectangle
+        coil_element_shapes = 2, 1.1, 0.3, 0.66, 0.12, // Annulus
+            3, 2.35, 1.65, 0.5, 0.3, // Rectangle
+            0, 0, 0, 0, 0; // No shape identifier for triangle

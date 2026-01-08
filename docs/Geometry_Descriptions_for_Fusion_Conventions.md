@@ -1,11 +1,11 @@
 # [DRAFT] Geometry Descriptions for Fusion Conventions
 
-This document describes how to attach geometric data to a variable in a netCDF
-file. For convience, this variable will be referred to as _data_variable_.
+This document describes how to attach geometric data to a labeled N-dimensional
+array. For convience, this variable will be referred to as _data_variable_.
 
 The _data_variable_ must have an attribute `geometry`. The string-value of this
 attribute must be equal to the name of a 0-dimensional variable in the data
-structure, which we will refer to as the _geometry_container_. Note that
+structure, which will be refered to as the _geometry_container_. Note that
 multiple data variables may refer to the same _geometry_container_.
 
 The _geometry_container_ must have at least the following two attributes
@@ -14,14 +14,14 @@ The _geometry_container_ must have at least the following two attributes
 - `geometry_type`.
 
 The string-value of the attribute `node_coordinates` contains the names of the
-variables in the data structure that hold the actual geometric data, all
+1D variables in the data structure that hold the actual geometric data, all
 separated by a single space. Each of
 these variables must hold an attribute `standard_name`, indicating which
 spatial coordinate this variable represents. The value of this attribute
 must differ for each of these variables.
 
 The attribute `geometry_type` indicates how to interpret the geometric data.
-Based on the value of this attribute the _geometry_container_ should have other
+Based on the value of this attribute the _geometry_container_ must have other
 attributes as well. Valid values for this attribute are any of the following:
 
 - [`point`](#point)
@@ -45,9 +45,8 @@ point-measurements of scalar quantities, such as temperature.
 
 The _geometry_container_ does not need any extra attributes for this geometry type.
 
-Each of the dimensions of the variables mentioned in the attribute
-`node_coordinates` of the _geometry_container_ must also be a dimension of
-_data_variable_.
+The dimension of the variables mentioned in the attribute `node_coordinates` of
+the _geometry_container_ must also be a dimension of _data_variable_.
 
 **Example**
 
@@ -75,7 +74,7 @@ _data_variable_.
 
 **Use case:**
 
-This geometry type is describes unit normal vectors in 3D space. It
+This geometry type describes unit normal vectors in 3D space. It
 can be used for point-measurements of projections of vector quantities, such as
 magnetic fields.
 
@@ -87,13 +86,13 @@ In this case, the geometry_container must also have an attribute
 The point in space from which this unit vector starts, is described by the 3
 variables in `node_coordinates`.
 
-The direction of the unit vector is described by the two variables whose name is
-mentioned in `node_orientations`, seperated by a single space. These variables
-represent the _normal_poloidal_angle and _normal_toroidal_angle, and must have
-an attribute `standard_name` with value "_normal_poloidal_angle" and
-"_normal_toroidal_angle", respectively.
+The direction of the unit vector is described by the two 1D variables whose
+names must be mentioned in `node_orientations`, seperated by a single space.
+These variables represent the _normal_poloidal_angle and _normal_toroidal_angle,
+and must have an attribute `standard_name` with value "_normal_poloidal_angle"
+and "_normal_toroidal_angle", respectively.
 
-Each of the dimensions of the variables mentioned in the attributes
+The dimension of the variables mentioned in the attributes
 `node_coordinates` and `node_orientations` of the _geometry_container_ must also
 be a dimension of _data_variable_.
 
@@ -130,7 +129,7 @@ be a dimension of _data_variable_.
 
 **Use case:**
 
-This geometric type describes connected line segments in 3D space.
+This geometric type describes connected line segments in 3D cartesian space. Each line segment is described by two points, the start and end point.
 
 **Extra requirements:**
 
@@ -141,14 +140,14 @@ container must have the same dimension, which will be refered to as their _node_
 dimension. These 1D variables describe the space coordinates of each 'node'.
 
 The string-value of the attribute `node_count` must be the name of an
-integer-valued variable in the data structure, where each of its dimensions must
+integer-valued variable in the data structure, where its dimension must
 also be a dimension of the corresponding variable _data_variable_.
 
 Furthermore, this variable must return the number of nodes required to describe
 the collection of connected line segments associated with a particular value in
 _data_variable_. This number corresponds with the number of consecutive entries
 in the 1D variables described in the attribute `node_coordinates`. It follows
-that each such numbers should be greater than 1.
+that each of these numbers should be greater than 1.
 
 Considering two consecutive nodes, the first node represents the beginning of a
 line segment and the second node represents the end of this line segment.
@@ -235,19 +234,16 @@ to repeat the first node at the end of this sequence.
             r:standard_name = "_radial_distance";
             r:description = "Major radius";
             r:units = "m";
-            r:standard_name = "_radial_distance";
 
         double phi(node);
             phi:standard_name = "_azimuth";
             phi:description = "Toroidal angle (oriented counter-clockwise when viewing from above)";
             phi:units = "rad";
-            phi:standard_name = "_azimuth";
         
         double z(node);
             z:standard_name = "_vertical_distance";
             z:description = "Height";
             z:units = "m";
-            z:standard_name = "_vertical_distance";
             
     data:
         time = 0.34, 0.67, 1.0, 1.34, 1.67;
@@ -272,18 +268,18 @@ to repeat the first node at the end of this sequence.
 
 **Use case:**
 
-This geometry type is used to describe a full circle, symmetric with respect to
-the phi-coordinate. In other words, each point on the circle has the same
-r,z-value. Therefore, it is sufficient to describe this circle with a single
-point in the r,z-plane.
+This geometry type describes a full circle, symmetric with respect to the
+coordinate _azimuth. In other words, each point on the circle has the same value
+for the coordinates _radial_distance and _vertical_distance. Therefore, it is
+sufficient to describe this circle by only specifying this value of
+_radial_distance and _vertical_distance.
 
 **Extra requirements:**
 
 The _geometry_container_ does not need any additional attributes.
 
-Each of the dimensions of the variables mentioned in the attribute
-`node_coordinates` of the _geometry_container_ must also be a dimension of
-_data_variable_.
+The dimension of the variables mentioned in the attribute `node_coordinates` of
+the _geometry_container_ must also be a dimension of _data_variable_.
 
 **Example**
 
@@ -314,29 +310,76 @@ _data_variable_.
 
 ### poloidal_line
 
-TO-DO
+**Use case:**
+
+This geometry type describes an axisymmetric surface. Since each cross-section
+in the plane "__radial_distance_ and __vertical_distance_" is the same for this
+geometry, it is sufficient to describe it by a collection of connected
+line-segments in this plane.
+
+**Extra requirements:**
+
+The required attributes of this type are exactly the same as with the geometric
+type 'line'. The only difference is that the attribute `node_coordinates` must
+not contain a variable whose attribute `standard_name` has value '_azimuth'.
+
+**Example**
+
+    dimensions:
+        device = 3;
+        time = 2;
+        node = 15;
+
+
+    variables:
+        double field_value(time, device);
+            diverter:geometry = "some_geometry_container";
+        
+        int some_geometry_container;
+            some_geometry_container:geometry_type = "poloidal_line";
+            some_geometry_container:node_coordinates = "r z" ;
+            some_geometry_container:node_count = "some_node_count";
+
+        int some_node_count(device)
+
+        double r(node);
+            r:standard_name = "_radial_distance";
+        
+        double z(node);
+            z:standard_name = "_vertical_distance";
 
 ### poloidal_polygon
 
-TO-DO
+**Use case:**
+
+This geometry type describes an axisymmetric volume. Since each cross-section in
+the plane "__radial_distance_ and __vertical_distance_" is the same for this
+geometry, it is sufficient to describe it by a polygon in this plane.
+
+**Extra requirements:**
+
+The required attributes of this type are exactly the same as with the geometric
+type 'polygon'. The only difference is that the attribute `node_coordinates`
+must not contain a variable whose attribute `standard_name` has value
+'_azimuth'.
 
 ## Geometries containing Multiple parts
 
-TO-DO
+**Use case:**
 
 If the geometry consists of several disconnected parts of the same
-`geometry_type`, then the _geometry_container_ must contain the attribute
-`part_node_count`.
+`geometry_type` other than [`point`](#point), then the _geometry_container_ must
+contain the attribute `part_node_count`. If the geometry consists of several
+disconnected [`points`](#point), then the _geometry_container_ should not
+contain the attribute `part_node_count`, since each 'part' would contain only a
+single node.
 
- and the data structure must have a dimension `part`.
+**Requirements:**
 
-The attribute `part_node_count` contains the name of the int-valued variable
+The attribute `part_node_count` contains the name of the integer-valued variable
 that represents the number of nodes per part. The dimension of this variable
-should be different from the dimension of the variables mentioned in
-`node_coordinates`.
-
-Note: which parts belong together can be infered from the corresponding
-int-values in the variables of `node_count` and `part_node_count`.
+should be different from the dimension of the variables mentioned in both
+`node_coordinates` and, if present, `node_count`.
 
 **Example**
 
@@ -346,14 +389,10 @@ int-values in the variables of `node_count` and `part_node_count`.
         part = 5;
 
     variables:
-        string name(device);
-            name:description = "Device name of axisymmetric conductor loop";
-
-        double area(part);
-            area:units = "m^2";
-            area:standard_name = "_cross_sectional_area_of_element";
+        double field(device);
+            field:geometry = "geometry_container";
         
-        int geometry_container ;
+        int geometry_container;
             geometry_container:geometry_type = "poloidal_point";
             geometry_container:node_count = "node_count" ;
             geometry_container:node_coordinates = "r z" ;
@@ -362,6 +401,8 @@ int-values in the variables of `node_count` and `part_node_count`.
         int node_count(device);
 
         int part_node_count(part); // Number of nodes per part.
+        // Which parts belong to which device can be infered from node_count and 
+        // part_node_count together.
 
         double r(node);
             r:units = "m";
@@ -371,9 +412,24 @@ int-values in the variables of `node_count` and `part_node_count`.
             z:units = "m";
             z:standard_name = "_vertical_distance";
 
-## Holes in geometry polygon
+## Holes in the geometry poloidal_polygon
 
-TO-DO
+**Use case:**
+
+In case the geometry of type [`poloidal_polygon`](#poloidal_polygon) consist of holes,
+then the _geometry_container_ must contain the attributes `part_node_count` and
+`interior`.
+
+**Extra requirements:**
+
+The attribute `part_node_count` contains the name of the integer-valued variable
+that represents the number of nodes per part, and the attribute `interior`
+contains the name of the integer-valued variable that indicates which part is
+considered as the interior of the geometry (value 0) and which part is considered
+exterior (value 1). These variables must have the same dimension.
+
+Each part of the geometry denoting the exterior of the geometry must be
+completely contained by another part representing the interior.
 
 **Example**
 
@@ -383,28 +439,21 @@ TO-DO
         part = 5;
 
     variables:
-
-        string name(device);
-            name:description = "Device name of axisymmetric conductor loop";
-
-        double area(part);
-            area:units = "m^2";
-            area:standard_name = "_cross_sectional_area_of_element";
+        double field(device);
+            field:geometry = "geometry_container";
         
-        int geometry_container ;
-            geometry_container:geometry_type = "polygon";
+        int geometry_container;
+            geometry_container:geometry_type = "poloidal_polygon";
             geometry_container:node_count = "node_count" ;
-            geometry_container:node_coordinates = "r phi z" ;
+            geometry_container:node_coordinates = "r z" ;
             geometry_container:part_node_count = "part_node_count" ;
-            geometry_container:interior_ring = "interior_ring" ;
+            geometry_container:interior = "interior" ;
 
         int node_count(device);
 
         int part_node_count(part); // Number of nodes per part.
-        // Which parts belong to which device can be infered from node_count and 
-        // part_node_count together.
 
-        int interior_ring(part); // Indicates whether surface enclosed by part is 
+        int interior(part); // Indicates whether surface enclosed by part is 
         // considered included (0) or excluded (1)
 
         double r(node);
@@ -417,11 +466,10 @@ TO-DO
 
 
     data:
-        name = "55.A3.00-MLF-3001" , "55.A3.00-MLF-3002", "55.A3.00-MLF-3003";
-        area = 9.8, 6.7, 8.3, 3.3, 7.0;
+        field = 9.8, 6.7, 3.6;
         node_count = 7, 4, 6;
         part_node_count = 3, 4, 4, 3, 3;
-        interior_ring = 0, 0, 0, 0, 1; // Triangle & rectangle, rectangle, and 
+        interior = 0, 0, 0, 0, 1; // Triangle & rectangle, rectangle, and 
         // triangle with triangular hole around centre
         r = 5.1, 4.1, 4.6, 4.1, 4.6, 4.6, 4.1, 
             6.9, 8.3, 8.3, 6.9,
@@ -431,3 +479,66 @@ TO-DO
             1.2, 1.2, 0.7, 0.7,
             8.2, 7.0, 7.6,
             7.9, 7.3, 7.5;
+
+## Adding labels to the geometry
+
+**Use case:**
+
+If one wants to add a label to a geometry, which could be used when plotting the
+geometries, then this is possible by including the attribute `label` in the
+_geometry_container_.
+
+**Extra requirements:**
+
+If the _geometry_container_ has the attribute `label`, then the string-value of
+this attribute must be the name of a string-valued variable. The dimension of
+  this variable must also be a dimension of _data_variable_ and, if the
+  attribute `node_count` is present, must be the same as the dimension of the
+ variable mentioned in the attribute `node_count`.
+
+**Example**
+
+[TO-DO]
+
+
+## More specific geometry information
+
+**Use case:**
+
+If one wants to add more specific geometry information to a geometry of type
+[`poloidal_line`](#poloidal_line) or [`poloidal_polygon`](#poloidal_polygon),
+then the attribute `geometric_shape` needs to be attached to the
+_geometry_container_. This attribute allows applications to obtain more accurate
+geometry information, especially when the actual geometry contains curvature as
+in the case of circles and annuli.
+
+**Extra requirements:**
+
+If the _geometry_container_ has the attribute `geometric_shape`, then the
+string-value of this attribute must be the name of a 2D float-valued variable of
+shape $N \times k$, where $N$ is the number of nodes. The first entry of each
+length-$k$ array represents an integer identifier determining the meaning of the
+other entries. This identifier will be refered to as the _shape_identifier_. The
+dimension of the first axis of this variable must also be a dimension of
+_data_variable_ and, if the attribute `node_count` is present, must be the same
+as the dimension of the variable mentioned in the attribute `node_count`.
+
+The variable mentioned in the attribute `geometric_shape` may contain 'NaN'
+values, such that not every value of _shape_identifier_ should require the use
+of the remaining $k-1$ entries and not every geometry needs to be associated
+with a specific geometry shape.
+
+Consider a length-$k$ array of the variable mentioned in the attribute
+`geometric_shape`: _[_shape_identifier_, $x_1$,..., $x_{k-1}$ ]_. The table below
+shows what the values of $x_i$ represent based on the value of
+_shape_identifier_
+
+| Shape              | _shape_identifier_ | $x_1$                             | $x_2$                               | $x_3$        | $x_4$        |
+|--------------------|--------------------|-----------------------------------|-------------------------------------|--------------|--------------|
+| Poloidal circle    | 1                  | _radial_distance<br>of the centre | _vertical_distance<br>of the centre | Radius       | -            |
+| Poloidal annulus   | 2                  | _radial_distance<br>of the centre | _vertical_distance<br>of the centre | Inner radius | Outer radius |
+| Poloidal rectangle | 3                  | _radial_distance<br>of the centre | _vertical_distance<br>of the centre | Width         | Height       |
+
+**Example**
+
+[TO-DO]

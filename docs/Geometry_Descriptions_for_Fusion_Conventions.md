@@ -574,10 +574,10 @@ _shape_identifier_
         coil_shape_size = 5;
 
     variables:
-        double coil.resistance(time, coil_element);
-            coil.resistance:standard_name = "_coil_resistance";
-            coil.resistance:units = "Ohm";
-            coil.resistance:geometry = "coil_geometry_container";
+        double coil_resistance(time, coil_element);
+            coil_resistance:standard_name = "_coil_resistance";
+            coil_resistance:units = "Ohm";
+            coil_resistance:geometry = "coil_geometry_container";
         
         int coil_geometry_container;
             coil_geometry_container:geometry_type = "poloidal_polygon";
@@ -602,18 +602,18 @@ _shape_identifier_
         double coil_element_shapes(coil_element, coil_shape_size);
 
     data:
-        coil.resistance = 0.0057, 0.00791, 0.0061,
+        coil_resistance = 0.0057, 0.00791, 0.0061,
             0.088, 0.034, 0.077;
         coil_element_node_count = 20, 4, 3; // An annulus (each circle described
         // by 10 points), a rectangle and a triangle
         coil_element_part_node_count = 10, 10, 4, 3;
         coil_element_interior = 0, 1, 0, 0;
-        coil_element_r = 1.76 , 1.634, 1.304, 0.896, 0.566, 0.44 , 0.566, 0.896, 1.304,
-            1.634,  1.22 , 1.197, 1.137, 1.063, 1.003, 0.98 , 1.003, 1.063, 1.137,
+        coil_element_r = 1.76, 1.634, 1.304, 0.896, 0.566, 0.44, 0.566, 0.896, 1.304,
+            1.634, 1.22 , 1.197, 1.137, 1.063, 1.003, 0.98, 1.003, 1.063, 1.137,
             1.197, 2.1, 2.1, 2.6, 2.6, 0.33, 1.1, 0.33;
-        coil_element_z = 0.3  ,  0.688,  0.928,  0.928,  0.688,  0.3  , -0.088, -0.328,
-            -0.328, -0.088, 0.3  , 0.371, 0.414, 0.414, 0.371, 0.3  , 0.229, 0.186, 0.186,
+        coil_element_z = 0.3, 0.688,  0.928,  0.928, 0.688, 0.3, -0.088, -0.328,
+            -0.328, -0.088, 0.3, 0.371, 0.414, 0.414, 0.371, 0.3, 0.229, 0.186, 0.186,
             0.229, 1.5, 1.8, 1.8, 1.5, 2.2, 2.5, 2.8;
-        coil_element_shapes = 2, 1.1, 0.3, 0.66, 0.12, // Annulus
-            3, 2.35, 1.65, 0.5, 0.3, // Rectangle
-            0, 0, 0, 0, 0; // No shape identifier for triangle
+        coil_element_shapes = 2.0, 1.1, 0.3, 0.66, 0.12, // Annulus
+            3.0, 2.35, 1.65, 0.5, 0.3, // Rectangle
+            0.0, 0.0, 0.0, 0.0, 0.0; // No shape identifier for triangle

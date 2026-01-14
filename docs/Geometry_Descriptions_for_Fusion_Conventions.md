@@ -1,6 +1,6 @@
 # [DRAFT] Geometry Descriptions for Fusion Conventions
 
-This document describes how to attach geometric data to a labeled N-dimensional
+This section describes how to attach geometric data to a labeled N-dimensional
 array. For convience, this variable will be referred to as _data_variable_.
 
 The _data_variable_ must have an attribute `geometry`. The string-value of this
@@ -154,7 +154,7 @@ line segment and the second node represents the end of this line segment.
 
 Note: in this manner, only connected line segments can be described since the
 last node of one line segment will be considered the start of the next line
-segment. For the description of disconnected line segments, see section [Geometries containing Multiple parts](#geometries-containing-multiple-parts)
+segment. For the description of disconnected line segments, see subsection [Geometries containing Multiple parts](#geometries-containing-multiple-parts)
 
 **Example**
 
@@ -199,12 +199,14 @@ segment. For the description of disconnected line segments, see section [Geometr
 
 **Use case:**
 
-This geometric type describes polygons in 3D space.
+This geometric type describes a planar 2D surface whose contour is a polygon. It
+is assumed that the entire surface lies in a single plane such that it is
+sufficient to describe the polygonal contour only.
 
 **Extra requirements:**
 
 The required attributes of this type are exactly the same as with the geometric
-type 'line'. The only addition is that for each sequence of nodes, the last node
+type [`line`](#line). The only addition is that for each sequence of nodes, the last node
 is assumed to form a connected line segment with the first node. It is allowed
 to repeat the first node at the end of this sequence.
 

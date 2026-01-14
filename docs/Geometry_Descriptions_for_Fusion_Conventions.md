@@ -159,60 +159,6 @@ segment. For the description of disconnected line segments, see subsection [Geom
 **Example**
 
     dimensions:
-        device = 3;
-        node = 15;
-        time = 5;
-
-    variables:
-        double field(time, device);
-            field:coordinates = "time r phi z";
-            field:geometry = "other_geometry_container";
-        
-        int other_geometry_container ;
-            other_geometry_container:geometry_type = "line";
-            other_geometry_container:node_count = "some_node_count" ;
-            other_geometry_container:node_coordinates = "r phi z" ;
-
-        int some_node_count(device);
-
-        double r(node);
-            r:standard_name = "_radial_distance";
-
-        double phi(node);
-            phi:standard_name = "_azimuth";
-        
-        double z(node);
-            z:standard_name = "_vertical_distance";
-    data:
-        node_count = 5, 4, 6;
-        r = 3.57187, 3.57186, 3.57186, 3.57187, 3.57187, 3.57186, 3.57186,
-            3.57186, 3.57186, 3.57186, 3.57187, 3.57186, 3.57186, 3.57187,
-            3.57187;
-        phi = 0.28012534, 0.28012534, 0.83199845, 0.83199845, 0.28012534,
-            0.48153634, 0.48153634, 0.83199845, 0.83199845, 0.48153634,
-            0.28012534, 0.28012534, 0.83199845, 0.83199845, 0.28012534 ;
-        z = -2.54437, -1.64615, -1.64615, -2.54437, -2.54437, -1.64014,
-            -0.52663, -0.52663, -1.64014, -1.64014, -0.51662,  0.47974,
-            0.47974, -0.51662, -0.51662 ;
-
-### polygon
-
-**Use case:**
-
-This geometric type describes a planar 2D surface whose contour is a polygon. It
-is assumed that the entire surface lies in a single plane such that it is
-sufficient to describe the polygonal contour only.
-
-**Extra requirements:**
-
-The required attributes of this type are exactly the same as with the geometric
-type [`line`](#line). The only addition is that for each sequence of nodes, the last node
-is assumed to form a connected line segment with the first node. It is allowed
-to repeat the first node at the end of this sequence.
-
-**Example**
-
-    dimensions:
         flux_loop = 3;
         node = 15;
         time = 5;
@@ -225,10 +171,10 @@ to repeat the first node at the end of this sequence.
             flux:coordinates = "time r phi z";
             flux:geometry = "geometry_container";
         
-        int geometry_container ;
-            geometry_container:geometry_type = "polygon";
-            geometry_container:node_count = "node_count" ;
-            geometry_container:node_coordinates = "r phi z" ;
+        int geometry_container;
+            geometry_container:geometry_type = "line";
+            geometry_container:node_count = "node_count";
+            geometry_container:node_coordinates = "r phi z";
 
         int node_count(flux_loop);
 
@@ -250,21 +196,37 @@ to repeat the first node at the end of this sequence.
     data:
         time = 0.34, 0.67, 1.0, 1.34, 1.67;
         flux = 
-            3.3, 4.1, 5.6, 
+            3.3, 4.1, 5.6,
             6.8, 7.7, 8.3,
-            1.9, 2.0, 3.0, 
+            1.9, 2.0, 3.0,
             4.7, 5.3, 7.0,
-            0.9, 1.6, 7.9 ;
+            0.9, 1.6, 7.9;
         node_count = 5, 5, 5;
-        r = 3.57187, 3.57186, 3.57186, 3.57187, 3.57187, 3.57186, 3.57186,
-            3.57186, 3.57186, 3.57186, 3.57187, 3.57186, 3.57186, 3.57187,
-            3.57187;
-        phi = 0.28012534, 0.28012534, 0.83199845, 0.83199845, 0.28012534,
+        r = 3.57187, 3.57186, 3.57186, 3.57187, 3.57187,
+            3.57186, 3.57186, 3.57186, 3.57186, 3.57186,
+            3.57187, 3.57186, 3.57186, 3.57187, 3.57187;
+        phi =   
+            0.28012534, 0.28012534, 0.83199845, 0.83199845, 0.28012534,
             0.48153634, 0.48153634, 0.83199845, 0.83199845, 0.48153634,
-            0.28012534, 0.28012534, 0.83199845, 0.83199845, 0.28012534 ;
-        z = -2.54437, -1.64615, -1.64615, -2.54437, -2.54437, -1.64014,
-            -0.52663, -0.52663, -1.64014, -1.64014, -0.51662,  0.47974,
-            0.47974, -0.51662, -0.51662 ;
+            0.28012534, 0.28012534, 0.83199845, 0.83199845, 0.28012534;
+        z = -2.54437, -1.64615, -1.64615, -2.54437, -2.54437,
+            -1.64014, -0.52663, -0.52663, -1.64014, -1.64014,
+            -0.51662,  0.47974,  0.47974, -0.51662, -0.51662;
+
+### polygon
+
+**Use case:**
+
+This geometric type describes a planar 2D surface whose contour is a polygon. It
+is assumed that the entire surface lies in a single plane such that it is
+sufficient to describe the polygonal contour only.
+
+**Extra requirements:**
+
+The required attributes of this type are exactly the same as with the geometric
+type [`line`](#line). The only addition is that for each sequence of nodes, the last node
+is assumed to form a connected line segment with the first node. It is allowed
+to repeat the first node at the end of this sequence.
 
 ### poloidal_point
 

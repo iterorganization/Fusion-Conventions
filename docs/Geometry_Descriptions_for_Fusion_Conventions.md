@@ -530,6 +530,7 @@ this attribute must be the name of a string-valued variable. The dimension of
 
 **Use case:**
 
+[TO-DO]
 If one wants to add more specific geometry information to a geometry of type
 [`poloidal_line`](#poloidal_line) or [`poloidal_polygon`](#poloidal_polygon),
 then the attribute `geometric_shape` needs to be attached to the
@@ -538,7 +539,7 @@ geometry information, especially when the actual geometry contains curvature as
 in the case of circles and annuli.
 
 **Extra requirements:**
-
+[TO-DO]
 If the _geometry_container_ has the attribute `geometric_shape`, then the
 string-value of this attribute must be the name of a 2D float-valued variable of
 shape $N \times k$, where $N$ is the number of nodes. The first entry of each
@@ -571,7 +572,6 @@ _shape_identifier_
         coil_element = 3;
         coil_node = 27;
         coil_part = 4;
-        coil_shape_size = 5;
 
     variables:
         double coil_resistance(time, coil_element);
@@ -585,7 +585,9 @@ _shape_identifier_
             coil_geometry_container:node_count = "coil_element_node_count";
             coil_geometry_container:part_node_count = "coil_element_part_node_count";
             coil_geometry_container:interior = "coil_element_interior";
-            coil_geometry_container:geometric_shape = "coil_element_shapes";
+            coil_geometry_container:poloidal_circle = "pol_circle_centre_r pol_circle_centre_z pol_circle_radius";
+            coil_geometry_container:poloidal_annulus = "pol_annulus_centre_r pol_annulus_centre_z pol_annulus_inner_radius pol_annulus_outer_radius";
+            coil_geometry_container:poloidal_rectangle = "pol_rectangle_centre_r pol_rectangle_centre_r pol_rectangle_width pol_rectangle_height";
 
         int coil_element_node_count(coil_element);
 
@@ -599,7 +601,41 @@ _shape_identifier_
         double coil_element_z(coil_node);
             coil_element_z:standard_name = "_vertical_distance";
 
-        double coil_element_shapes(coil_element, coil_shape_size);
+        // Variables related to poloidal circle
+        double pol_circle_centre_r(coil_element);
+            pol_circle_centre_r:standard_name = "_radial_distance";
+
+        double pol_circle_centre_z(coil_element);
+            pol_circle_centre_z:standard_name = "_vertical_distance";
+
+        double pol_circle_radius(coil_element);
+            pol_circle_radius:standard_name = "_some_radius";
+
+        // Variables related to poloidal annulus
+        double pol_annulus_centre_r(coil_element);
+            pol_annulus_centre_r:standard_name = "_radial_distance";
+
+        double pol_annulus_centre_z(coil_element);
+            pol_annulus_centre_z:standard_name = "_vertical_distance";
+
+        double pol_annulus_inner_radius(coil_element);
+            pol_annulus_inner_radius:standard_name = "_some_radius";
+
+        double pol_annulus_outer_radius(coil_element);
+            pol_annulus_outer_radius:standard_name = "_some_radius";
+
+        // Variables related to poloidal rectangle
+        double pol_rectangle_centre_r(coil_element);
+            pol_rectangle_centre_r:standard_name = "_radial_distance";
+
+        double pol_rectangle_centre_z(coil_element);
+            pol_rectangle_centre_z:standard_name = "_vertical_distance";
+
+        double pol_rectangle_width(coil_element);
+            pol_rectangle_width:standard_name = "_some_width";
+
+        double pol_rectangle_height(coil_element);
+            pol_rectangle_height:standard_name = "_some_height";
 
     data:
         coil_resistance = 0.0057, 0.00791, 0.0061,
@@ -614,6 +650,14 @@ _shape_identifier_
         coil_element_z = 0.3, 0.688,  0.928,  0.928, 0.688, 0.3, -0.088, -0.328,
             -0.328, -0.088, 0.3, 0.371, 0.414, 0.414, 0.371, 0.3, 0.229, 0.186, 0.186,
             0.229, 1.5, 1.8, 1.8, 1.5, 2.2, 2.5, 2.8;
-        coil_element_shapes = 2.0, 1.1, 0.3, 0.66, 0.12, // Annulus
-            3.0, 2.35, 1.65, 0.5, 0.3, // Rectangle
-            0.0, 0.0, 0.0, 0.0, 0.0; // No shape identifier for triangle
+        pol_circle_centre_r = NaN, NaN, NaN;
+        pol_circle_centre_z = NaN, NaN, NaN;
+        pol_circle_radius = NaN, NaN, NaN;
+        pol_annulus_centre_r = 1.1, NaN, NaN;
+        pol_annulus_centre_z = 0.3, NaN, NaN;
+        pol_annulus_inner_radius = 0.12, NaN, NaN;
+        pol_annulus_outer_radius = 0.66, NaN, NaN;
+        pol_rectangle_centre_r = NaN, 2.35, NaN;
+        pol_rectangle_centre_z = NaN, 1.65, NaN;
+        pol_rectangle_width = NaN, 0.5, NaN;
+        pol_rectangle_heigt = NaN, 0.3, NaN;

@@ -140,13 +140,13 @@ container must have the same dimension, which will be refered to as their _node_
 dimension. These 1D variables describe the space coordinates of each 'node'.
 
 The string-value of the attribute `node_count` must be the name of an
-integer-valued variable in the data structure, where its dimension must
+integer-valued variable in the data structure whose dimension must
 also be a dimension of the corresponding variable _data_variable_.
 
 Furthermore, this variable must return the number of nodes required to describe
 the collection of connected line segments associated with a particular value in
 _data_variable_. This number corresponds with the number of consecutive entries
-in the 1D variables described in the attribute `node_coordinates`. It follows
+in the 1D variables mentioned in the attribute `node_coordinates`. It follows
 that each of these numbers should be greater than 1.
 
 Considering two consecutive nodes, the first node represents the beginning of a

@@ -217,16 +217,15 @@ segment. For the description of disconnected line segments, see subsection [Geom
 
 **Use case:**
 
-This geometric type describes a planar 2D surface whose contour is a polygon. It
-is assumed that the entire surface lies in a single plane such that it is
-sufficient to describe the polygonal contour only.
+This geometric type describes a planar surface whose contour is a polygon. N.B.
+All points of the contour must be on a single plane.
 
 **Extra requirements:**
 
 The required attributes of this type are exactly the same as with the geometric
-type [`line`](#line). The only addition is that for each sequence of nodes, the last node
-is assumed to form a connected line segment with the first node. It is allowed
-to repeat the first node at the end of this sequence.
+type [`line`](#line). The only addition is that for each sequence of nodes, the
+last node is assumed to form a connected line segment with the first node. It is
+allowed to repeat the first node at the end of this sequence.
 
 ### poloidal_point
 

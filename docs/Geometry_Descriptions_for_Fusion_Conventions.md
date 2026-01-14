@@ -585,9 +585,9 @@ _shape_identifier_
             coil_geometry_container:node_count = "coil_element_node_count";
             coil_geometry_container:part_node_count = "coil_element_part_node_count";
             coil_geometry_container:interior = "coil_element_interior";
-            coil_geometry_container:poloidal_circle = "pol_circle_centre_r pol_circle_centre_z pol_circle_radius";
-            coil_geometry_container:poloidal_annulus = "pol_annulus_centre_r pol_annulus_centre_z pol_annulus_inner_radius pol_annulus_outer_radius";
-            coil_geometry_container:poloidal_rectangle = "pol_rectangle_centre_r pol_rectangle_centre_r pol_rectangle_width pol_rectangle_height";
+            coil_geometry_container:circle = "circle_centre_r circle_centre_z circle_radius";
+            coil_geometry_container:annulus = "annulus_centre_r annulus_centre_z annulus_inner_radius annulus_outer_radius";
+            coil_geometry_container:rectangle = "rectangle_centre_r rectangle_centre_r rectangle_width rectangle_height";
 
         int coil_element_node_count(coil_element);
 
@@ -602,40 +602,40 @@ _shape_identifier_
             coil_element_z:standard_name = "_vertical_distance";
 
         // Variables related to poloidal circle
-        double pol_circle_centre_r(coil_element);
-            pol_circle_centre_r:standard_name = "_radial_distance";
+        double circle_centre_r(coil_element);
+            circle_centre_r:standard_name = "_radial_distance";
 
-        double pol_circle_centre_z(coil_element);
-            pol_circle_centre_z:standard_name = "_vertical_distance";
+        double circle_centre_z(coil_element);
+            circle_centre_z:standard_name = "_vertical_distance";
 
-        double pol_circle_radius(coil_element);
-            pol_circle_radius:standard_name = "_some_radius";
+        double circle_radius(coil_element);
+            circle_radius:standard_name = "_some_radius";
 
         // Variables related to poloidal annulus
-        double pol_annulus_centre_r(coil_element);
-            pol_annulus_centre_r:standard_name = "_radial_distance";
+        double annulus_centre_r(coil_element);
+            annulus_centre_r:standard_name = "_radial_distance";
 
-        double pol_annulus_centre_z(coil_element);
-            pol_annulus_centre_z:standard_name = "_vertical_distance";
+        double annulus_centre_z(coil_element);
+            annulus_centre_z:standard_name = "_vertical_distance";
 
-        double pol_annulus_inner_radius(coil_element);
-            pol_annulus_inner_radius:standard_name = "_some_radius";
+        double annulus_inner_radius(coil_element);
+            annulus_inner_radius:standard_name = "_some_radius";
 
-        double pol_annulus_outer_radius(coil_element);
-            pol_annulus_outer_radius:standard_name = "_some_radius";
+        double annulus_outer_radius(coil_element);
+            annulus_outer_radius:standard_name = "_some_radius";
 
         // Variables related to poloidal rectangle
-        double pol_rectangle_centre_r(coil_element);
-            pol_rectangle_centre_r:standard_name = "_radial_distance";
+        double rectangle_centre_r(coil_element);
+            rectangle_centre_r:standard_name = "_radial_distance";
 
-        double pol_rectangle_centre_z(coil_element);
-            pol_rectangle_centre_z:standard_name = "_vertical_distance";
+        double rectangle_centre_z(coil_element);
+            rectangle_centre_z:standard_name = "_vertical_distance";
 
-        double pol_rectangle_width(coil_element);
-            pol_rectangle_width:standard_name = "_some_width";
+        double rectangle_width(coil_element);
+            rectangle_width:standard_name = "_some_width";
 
-        double pol_rectangle_height(coil_element);
-            pol_rectangle_height:standard_name = "_some_height";
+        double rectangle_height(coil_element);
+            rectangle_height:standard_name = "_some_height";
 
     data:
         coil_resistance = 0.0057, 0.00791, 0.0061,
@@ -650,14 +650,14 @@ _shape_identifier_
         coil_element_z = 0.3, 0.688,  0.928,  0.928, 0.688, 0.3, -0.088, -0.328,
             -0.328, -0.088, 0.3, 0.371, 0.414, 0.414, 0.371, 0.3, 0.229, 0.186, 0.186,
             0.229, 1.5, 1.8, 1.8, 1.5, 2.2, 2.5, 2.8;
-        pol_circle_centre_r = NaN, NaN, NaN;
-        pol_circle_centre_z = NaN, NaN, NaN;
-        pol_circle_radius = NaN, NaN, NaN;
-        pol_annulus_centre_r = 1.1, NaN, NaN;
-        pol_annulus_centre_z = 0.3, NaN, NaN;
-        pol_annulus_inner_radius = 0.12, NaN, NaN;
-        pol_annulus_outer_radius = 0.66, NaN, NaN;
-        pol_rectangle_centre_r = NaN, 2.35, NaN;
-        pol_rectangle_centre_z = NaN, 1.65, NaN;
-        pol_rectangle_width = NaN, 0.5, NaN;
-        pol_rectangle_heigt = NaN, 0.3, NaN;
+        circle_centre_r = _, _, _;
+        circle_centre_z = _, _, _;
+        circle_radius = _, _, _;
+        annulus_centre_r = 1.1, _, _;
+        annulus_centre_z = 0.3, _, _;
+        annulus_inner_radius = 0.12, _, _;
+        annulus_outer_radius = 0.66, _, _;
+        rectangle_centre_r = _, 2.35, _;
+        rectangle_centre_z = _, 1.65, _;
+        rectangle_width = _, 0.5, _;
+        rectangle_heigt = _, 0.3, _;

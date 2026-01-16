@@ -557,25 +557,24 @@ variables corresponds with one geometry.
 Each geometry may be associated with at most one shape, such that no two
 _shape_variables_ associated with different shapes may have values at the same
 entry. The absence of a value must be indicated with either a _NaN_-value or a
-'Fillvalue'
+'Fillvalue'.
 
-The table below shows what the variables mentioned in each of the
-_shape_attributes_ must represent
+The table below shows what is encoded in each of the _shape_variables_ mentioned
+in each of the _shape_attributes_
 
-| _shape_attribute_ | Number of  variables | What is encoded in variable | Value of attribute  `standard_name` of  variable |
-|-------------------|----------------------|-----------------------------|--------------------------------------------------|
-| circle            | 3                    | r-coordinate of centre      | _radial_distance                                 |
-|                   |                      | z-coordinate of centre      | _vertical_distance                               |
-|                   |                      | Radius of circle            | -                                                |
-| annulus           | 4                    | r-coordinate of centre      | _radial_distance                                 |
-|                   |                      | z-coordinate of centre      | _vertical_distance                               |
-|                   |                      | Inner radius of annulus     | -                                                |
-|                   |                      | Outer radius of annulus     | -                                                |
-| rectangle         | 4                    | r-coordinate of centre      | _radial_distance                                 |
-|                   |                      | z-coordinate of centre      | _vertical_distance                               |
-|                   |                      | Horizontal width            | -                                                |
-|                   |                      | Vertcal height              | -                                                |
-
+| _shape_attribute_ | Position of variable name in list | What is encoded in variable | Value of attribute  `standard_name` of  variable |
+|-------------------|-----------------------------------|-----------------------------|--------------------------------------------------|
+| circle            | 1                                 | r-coordinate of centre      | _radial_distance                                 |
+|                   | 2                                 | z-coordinate of centre      | _vertical_distance                               |
+|                   | 3                                 | Radius of circle            | -                                                |
+| annulus           | 1                                 | r-coordinate of centre      | _radial_distance                                 |
+|                   | 2                                 | z-coordinate of centre      | _vertical_distance                               |
+|                   | 3                                 | Inner radius of annulus     | -                                                |
+|                   | 4                                 | Outer radius of annulus     | -                                                |
+| rectangle         | 1                                 | r-coordinate of centre      | _radial_distance                                 |
+|                   | 2                                 | z-coordinate of centre      | _vertical_distance                               |
+|                   | 3                                 | Horizontal width            | -                                                |
+|                   | 4                                 | Vertcal height              | -                                                |
 **Example**
 
     dimensions:
@@ -597,7 +596,7 @@ _shape_attributes_ must represent
             coil_geometry_container:part_node_count = "coil_element_part_node_count";
             coil_geometry_container:interior = "coil_element_interior";
             coil_geometry_container:annulus = "annulus_centre_r annulus_centre_z annulus_inner_radius annulus_outer_radius";
-            coil_geometry_container:rectangle = "rectangle_centre_r rectangle_centre_r rectangle_width rectangle_height";
+            coil_geometry_container:rectangle = "rectangle_centre_r rectangle_centre_z rectangle_width rectangle_height";
 
         int coil_element_node_count(coil_element);
 

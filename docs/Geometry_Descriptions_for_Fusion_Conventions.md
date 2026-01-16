@@ -1,6 +1,6 @@
 # [DRAFT] Geometry Descriptions for Fusion Conventions
 
-This document describes how to attach geometric data to a labeled N-dimensional
+This section describes how to attach geometric data to a labeled N-dimensional
 array. For convience, this variable will be referred to as _data_variable_.
 
 The _data_variable_ must have an attribute `geometry`. The string-value of this
@@ -140,13 +140,13 @@ container must have the same dimension, which will be refered to as their _node_
 dimension. These 1D variables describe the space coordinates of each 'node'.
 
 The string-value of the attribute `node_count` must be the name of an
-integer-valued variable in the data structure, where its dimension must
+integer-valued variable in the data structure whose dimension must
 also be a dimension of the corresponding variable _data_variable_.
 
 Furthermore, this variable must return the number of nodes required to describe
 the collection of connected line segments associated with a particular value in
 _data_variable_. This number corresponds with the number of consecutive entries
-in the 1D variables described in the attribute `node_coordinates`. It follows
+in the 1D variables mentioned in the attribute `node_coordinates`. It follows
 that each of these numbers should be greater than 1.
 
 Considering two consecutive nodes, the first node represents the beginning of a
@@ -154,59 +154,7 @@ line segment and the second node represents the end of this line segment.
 
 Note: in this manner, only connected line segments can be described since the
 last node of one line segment will be considered the start of the next line
-segment. For the description of disconnected line segments, see section [Geometries containing Multiple parts](#geometries-containing-multiple-parts)
-
-**Example**
-
-    dimensions:
-        device = 3;
-        node = 15;
-        time = 5;
-
-    variables:
-        double field(time, device);
-            field:coordinates = "time r phi z";
-            field:geometry = "other_geometry_container";
-        
-        int other_geometry_container ;
-            other_geometry_container:geometry_type = "line";
-            other_geometry_container:node_count = "some_node_count" ;
-            other_geometry_container:node_coordinates = "r phi z" ;
-
-        int some_node_count(device);
-
-        double r(node);
-            r:standard_name = "_radial_distance";
-
-        double phi(node);
-            phi:standard_name = "_azimuth";
-        
-        double z(node);
-            z:standard_name = "_vertical_distance";
-    data:
-        node_count = 5, 4, 6;
-        r = 3.57187, 3.57186, 3.57186, 3.57187, 3.57187, 3.57186, 3.57186,
-            3.57186, 3.57186, 3.57186, 3.57187, 3.57186, 3.57186, 3.57187,
-            3.57187;
-        phi = 0.28012534, 0.28012534, 0.83199845, 0.83199845, 0.28012534,
-            0.48153634, 0.48153634, 0.83199845, 0.83199845, 0.48153634,
-            0.28012534, 0.28012534, 0.83199845, 0.83199845, 0.28012534 ;
-        z = -2.54437, -1.64615, -1.64615, -2.54437, -2.54437, -1.64014,
-            -0.52663, -0.52663, -1.64014, -1.64014, -0.51662,  0.47974,
-            0.47974, -0.51662, -0.51662 ;
-
-### polygon
-
-**Use case:**
-
-This geometric type describes polygons in 3D space.
-
-**Extra requirements:**
-
-The required attributes of this type are exactly the same as with the geometric
-type 'line'. The only addition is that for each sequence of nodes, the last node
-is assumed to form a connected line segment with the first node. It is allowed
-to repeat the first node at the end of this sequence.
+segment. For the description of disconnected line segments, see subsection [Geometries containing Multiple parts](#geometries-containing-multiple-parts)
 
 **Example**
 
@@ -223,10 +171,10 @@ to repeat the first node at the end of this sequence.
             flux:coordinates = "time r phi z";
             flux:geometry = "geometry_container";
         
-        int geometry_container ;
-            geometry_container:geometry_type = "polygon";
-            geometry_container:node_count = "node_count" ;
-            geometry_container:node_coordinates = "r phi z" ;
+        int geometry_container;
+            geometry_container:geometry_type = "line";
+            geometry_container:node_count = "node_count";
+            geometry_container:node_coordinates = "r phi z";
 
         int node_count(flux_loop);
 
@@ -248,21 +196,36 @@ to repeat the first node at the end of this sequence.
     data:
         time = 0.34, 0.67, 1.0, 1.34, 1.67;
         flux = 
-            3.3, 4.1, 5.6, 
+            3.3, 4.1, 5.6,
             6.8, 7.7, 8.3,
-            1.9, 2.0, 3.0, 
+            1.9, 2.0, 3.0,
             4.7, 5.3, 7.0,
-            0.9, 1.6, 7.9 ;
+            0.9, 1.6, 7.9;
         node_count = 5, 5, 5;
-        r = 3.57187, 3.57186, 3.57186, 3.57187, 3.57187, 3.57186, 3.57186,
-            3.57186, 3.57186, 3.57186, 3.57187, 3.57186, 3.57186, 3.57187,
-            3.57187;
-        phi = 0.28012534, 0.28012534, 0.83199845, 0.83199845, 0.28012534,
+        r = 3.57187, 3.57186, 3.57186, 3.57187, 3.57187,
+            3.57186, 3.57186, 3.57186, 3.57186, 3.57186,
+            3.57187, 3.57186, 3.57186, 3.57187, 3.57187;
+        phi =   
+            0.28012534, 0.28012534, 0.83199845, 0.83199845, 0.28012534,
             0.48153634, 0.48153634, 0.83199845, 0.83199845, 0.48153634,
-            0.28012534, 0.28012534, 0.83199845, 0.83199845, 0.28012534 ;
-        z = -2.54437, -1.64615, -1.64615, -2.54437, -2.54437, -1.64014,
-            -0.52663, -0.52663, -1.64014, -1.64014, -0.51662,  0.47974,
-            0.47974, -0.51662, -0.51662 ;
+            0.28012534, 0.28012534, 0.83199845, 0.83199845, 0.28012534;
+        z = -2.54437, -1.64615, -1.64615, -2.54437, -2.54437,
+            -1.64014, -0.52663, -0.52663, -1.64014, -1.64014,
+            -0.51662,  0.47974,  0.47974, -0.51662, -0.51662;
+
+### polygon
+
+**Use case:**
+
+This geometric type describes a planar surface whose contour is a polygon. N.B.
+All points of the contour must be on a single plane.
+
+**Extra requirements:**
+
+The required attributes of this type are exactly the same as with the geometric
+type [`line`](#line). The only addition is that for each sequence of nodes, the
+last node is assumed to form a connected line segment with the first node. It is
+allowed to repeat the first node at the end of this sequence.
 
 ### poloidal_point
 

@@ -585,7 +585,6 @@ _shape_identifier_
             coil_geometry_container:node_count = "coil_element_node_count";
             coil_geometry_container:part_node_count = "coil_element_part_node_count";
             coil_geometry_container:interior = "coil_element_interior";
-            coil_geometry_container:circle = "circle_centre_r circle_centre_z circle_radius";
             coil_geometry_container:annulus = "annulus_centre_r annulus_centre_z annulus_inner_radius annulus_outer_radius";
             coil_geometry_container:rectangle = "rectangle_centre_r rectangle_centre_r rectangle_width rectangle_height";
 
@@ -650,9 +649,6 @@ _shape_identifier_
         coil_element_z = 0.3, 0.688,  0.928,  0.928, 0.688, 0.3, -0.088, -0.328,
             -0.328, -0.088, 0.3, 0.371, 0.414, 0.414, 0.371, 0.3, 0.229, 0.186, 0.186,
             0.229, 1.5, 1.8, 1.8, 1.5, 2.2, 2.5, 2.8;
-        circle_centre_r = _, _, _;
-        circle_centre_z = _, _, _;
-        circle_radius = _, _, _;
         annulus_centre_r = 1.1, _, _;
         annulus_centre_z = 0.3, _, _;
         annulus_inner_radius = 0.12, _, _;

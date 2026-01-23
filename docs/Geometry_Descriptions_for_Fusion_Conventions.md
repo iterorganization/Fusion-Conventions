@@ -493,40 +493,53 @@ this attribute must be the name of a string-valued variable. The dimension of
 
 **Use case:**
 
-[TO-DO]
 If one wants to add more specific geometry information to a geometry of type
 [`poloidal_line`](#poloidal_line) or [`poloidal_polygon`](#poloidal_polygon),
-then the attribute `geometric_shape` needs to be attached to the
-_geometry_container_. This attribute allows applications to obtain more accurate
-geometry information, especially when the actual geometry contains curvature as
-in the case of circles and annuli.
+then this is possible by adding one or more of the following _shape_attributes_
+to the _geometry_container_
+
+- circle
+- annulus
+- rectangle
+
+These attributes allow applications to obtain more accurate geometry
+information, especially when the actual geometry contains curvature as in the
+case of circles and annuli.
 
 **Extra requirements:**
-[TO-DO]
-If the _geometry_container_ has the attribute `geometric_shape`, then the
-string-value of this attribute must be the name of a 2D float-valued variable of
-shape $N \times k$, where $N$ is the number of nodes. The first entry of each
-length-$k$ array represents an integer identifier determining the meaning of the
-other entries. This identifier will be refered to as the _shape_identifier_. The
-dimension of the first axis of this variable must also be a dimension of
-_data_variable_ and, if the attribute `node_count` is present, must be the same
-as the dimension of the variable mentioned in the attribute `node_count`.
 
-The variable mentioned in the attribute `geometric_shape` may contain 'NaN'
-values, such that not every value of _shape_identifier_ should require the use
-of the remaining $k-1$ entries and not every geometry needs to be associated
-with a specific geometry shape.
+The string value of each of the attributes mentioned above must contain the
+names of the 1D double-variables in the data structure that hold the parameters
+required to describe the corresponding shape, all separated by a single space.
+These variables will be refered to as the _shape_variables_.
 
-Consider a length-$k$ array of the variable mentioned in the attribute
-`geometric_shape`: _[_shape_identifier_, $x_1$,..., $x_{k-1}$ ]_. The table below
-shows what the values of $x_i$ represent based on the value of
-_shape_identifier_
+The dimension of each _shape_variable_ must be the same as the dimension of the
+variable mentioned in the attribute `node_count`, such that each entry in these
+variables corresponds with one geometry.
 
-| Shape              | _shape_identifier_ | $x_1$                             | $x_2$                               | $x_3$        | $x_4$        |
-|--------------------|--------------------|-----------------------------------|-------------------------------------|--------------|--------------|
-| Poloidal circle    | 1                  | _radial_distance<br>of the centre | _vertical_distance<br>of the centre | Radius       | -            |
-| Poloidal annulus   | 2                  | _radial_distance<br>of the centre | _vertical_distance<br>of the centre | Inner radius | Outer radius |
-| Poloidal rectangle | 3                  | _radial_distance<br>of the centre | _vertical_distance<br>of the centre | Width         | Height       |
+Each geometry may be associated with at most one shape, such that no two
+_shape_variables_ associated with different shapes may have values at the same
+entry. The absence of a value must be indicated with either a _NaN_-value or a
+'Fillvalue'.
+
+The table below shows what must be encoded in each of the _shape_variables_
+mentioned in each of the _shape_attributes_. The order of the description of the
+_shape_variables_ in this table must coincide with the order of the variable
+names in the corresponding _shape_attribute_.
+
+| _shape_attribute_ | What is encoded in variable | Value of attribute  `standard_name` of  variable |
+|-------------------|-----------------------------|--------------------------------------------------|
+| circle            | r-coordinate of centre      | _radial_position_circle_centre                   |
+|                   | z-coordinate of centre      | _vertical_position_circle_centre                 |
+|                   | Radius of circle            | _radius_circle                                   |
+| annulus           | r-coordinate of centre      | _radial_position_annulus_centre                  |
+|                   | z-coordinate of centre      | _vertical_position_annulus_centre                |
+|                   | Inner radius of annulus     | _inner_radius_annulus                            |
+|                   | Outer radius of annulus     | _outer_radius_annulus                            |
+| rectangle         | r-coordinate of centre      | _radial_position_rectangle_centre                |
+|                   | z-coordinate of centre      | _vertical_position_rectangle_centre              |
+|                   | Horizontal width            | _radial_width_rectangle                          |
+|                   | Vertcal height              | _vertical_height_rectangle                       |
 
 **Example**
 
@@ -549,7 +562,7 @@ _shape_identifier_
             coil_geometry_container:part_node_count = "coil_element_part_node_count";
             coil_geometry_container:interior = "coil_element_interior";
             coil_geometry_container:annulus = "annulus_centre_r annulus_centre_z annulus_inner_radius annulus_outer_radius";
-            coil_geometry_container:rectangle = "rectangle_centre_r rectangle_centre_r rectangle_width rectangle_height";
+            coil_geometry_container:rectangle = "rectangle_centre_r rectangle_centre_z rectangle_width rectangle_height";
 
         int coil_element_node_count(coil_element);
 

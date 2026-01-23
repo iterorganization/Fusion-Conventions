@@ -559,22 +559,25 @@ _shape_variables_ associated with different shapes may have values at the same
 entry. The absence of a value must be indicated with either a _NaN_-value or a
 'Fillvalue'.
 
-The table below shows what is encoded in each of the _shape_variables_ mentioned
-in each of the _shape_attributes_
+The table below shows what must be encoded in each of the _shape_variables_
+mentioned in each of the _shape_attributes_. The order of the description of the
+_shape_variables_ in this table must coincide with the order of the variable
+names in the corresponding _shape_attribute_.
 
-| _shape_attribute_ | Position of variable name in list | What is encoded in variable | Value of attribute  `standard_name` of  variable |
-|-------------------|-----------------------------------|-----------------------------|--------------------------------------------------|
-| circle            | 1                                 | r-coordinate of centre      | _radial_distance                                 |
-|                   | 2                                 | z-coordinate of centre      | _vertical_distance                               |
-|                   | 3                                 | Radius of circle            | -                                                |
-| annulus           | 1                                 | r-coordinate of centre      | _radial_distance                                 |
-|                   | 2                                 | z-coordinate of centre      | _vertical_distance                               |
-|                   | 3                                 | Inner radius of annulus     | -                                                |
-|                   | 4                                 | Outer radius of annulus     | -                                                |
-| rectangle         | 1                                 | r-coordinate of centre      | _radial_distance                                 |
-|                   | 2                                 | z-coordinate of centre      | _vertical_distance                               |
-|                   | 3                                 | Horizontal width            | -                                                |
-|                   | 4                                 | Vertcal height              | -                                                |
+| _shape_attribute_ | What is encoded in variable | Value of attribute  `standard_name` of  variable |
+|-------------------|-----------------------------|--------------------------------------------------|
+| circle            | r-coordinate of centre      | _radial_position_circle_centre                   |
+|                   | z-coordinate of centre      | _vertical_position_circle_centre                 |
+|                   | Radius of circle            | _radius_circle                                   |
+| annulus           | r-coordinate of centre      | _radial_position_annulus_centre                  |
+|                   | z-coordinate of centre      | _vertical_position_annulus_centre                |
+|                   | Inner radius of annulus     | _inner_radius_annulus                            |
+|                   | Outer radius of annulus     | _outer_radius_annulus                            |
+| rectangle         | r-coordinate of centre      | _radial_position_rectangle_centre                |
+|                   | z-coordinate of centre      | _vertical_position_rectangle_centre              |
+|                   | Horizontal width            | _radial_width_rectangle                          |
+|                   | Vertcal height              | _vertical_height_rectangle                       |
+
 **Example**
 
     dimensions:
